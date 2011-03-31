@@ -26,7 +26,6 @@ function split_lines(text) {
 
 var server = dnode({
   compile: function (text, _callback) {
-    console.log("compile called!");
     var gcc = spawn('/bin/sh', ['-c', 'gcc -Wall -x c++ - -lstdc++']);
     var stderr = '';
     gcc.stdin.end(text);

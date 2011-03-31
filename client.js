@@ -10,15 +10,17 @@ function show_errors(errs) {
   }
 }
 
-function Setup(remote) {
+function setup(remote) {
+  var editor = ace.edit("editor");
+  var CppMode = require("ace/mode/c_cpp").Mode;
+  editor.getSession().setMode(new CppMode());
+
   $("#compile").click(function () {
-    remote.compile($("#editor").val(), show_errors);
+    var code = editor.getSession().getDocument().getValue();
+    remote.compile(code, show_errors);
   });
 }
 
 $(document).ready(function () {
-  DNode.connect(Setup);
-  var editor = ace.edit("editor");
-  var CppMode = require("ace/mode/c_cpp").Mode;
-  editor.getSession().setMode(new CppMode());
+  DNode.connect(setup);
 });

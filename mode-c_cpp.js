@@ -1,0 +1,1 @@
+/home/pauek/src/javascript/ace/build/src/mode-c_cpp.js
