@@ -1,5 +1,6 @@
 
 var express  = require('express');
+var fs = require('fs');
 var app = express.createServer();
 app.use(express.static(__dirname));
 
@@ -47,6 +48,7 @@ var Session = function (params) {
   console.log("Session start: " + id + ' ' + client + ' ' + conn);
   
   conn.addListener('end', function() {
+	 fs.unlink('a.out.' + id);
 	 console.log('Session end:' + id + ' ' + client + ' ' + conn);
   });
 
