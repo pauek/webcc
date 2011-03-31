@@ -16,11 +16,10 @@ function highlight_item(item) {
 }
 
 function error_line(err) {
-  var patt = /^(\d+): ?error:/;
-  var M = err.match(patt);
+  var M = err.match(/^(\d+):(\d+):/);
   var lineno;
   if (M && M.length > 0) {
-	 lineno = Number(M[0]);
+	 lineno = Number(M[1]);
   }
   return lineno;
 }
@@ -29,9 +28,7 @@ function add_error(err) {
   $('<pre>' + err + '</pre>')
     .click(function () {
 		var ln = error_line(err);
-		if (ln) {
-		  editor.scrollToLine(ln, false);
-		}
+		if (ln) editor.gotoLine(ln, false);
 		highlight_item(this);
 	 })
 	 .appendTo("#errors");
@@ -53,12 +50,18 @@ function show_errors(errs) {
 }
 
 function setup(remote) {
-  editor = ace.edit("editor");
+  var EditSession = require("ace/edit_session").EditSession;
   var CppMode = require("ace/mode/c_cpp").Mode;
-  editor.getSession().setMode(new CppMode());
+
+  editor = ace.edit("editor");
+  var program = $("#program").html();
+  var session = new EditSession(program);
+  session.setMode(new CppMode());
+  session.setTabSize(2);
+  editor.setSession(session);
 
   $("#compile").click(function () {
-    var code = editor.getSession().getDocument().getValue();
+    var code = session.getDocument().getValue();
     remote.compile(code, show_errors);
   });
 
