@@ -24,11 +24,12 @@ function split_lines(text) {
   return lines;
 }
 
-var compiler = "clang";
+var compiler = "gcc";
 
 var server = dnode({
   compile: function (text, _callback) {
-    var cc = spawn('/bin/sh', ['-c', compiler + ' -Wall -x c++ - -lstdc++']);
+	 var cmd = compiler + ' -Wall -x c++ - -lstdc++';
+    var cc = spawn('/bin/sh', ['-c', cmd]);
     var stderr = '';
     cc.stdin.end(text);
     cc.stderr.addListener('data', function (chunk) {

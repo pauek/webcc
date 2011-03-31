@@ -16,7 +16,7 @@ function highlight_item(item) {
 }
 
 function error_line(err) {
-  var M = err.match(/^(\d+):(\d+):/);
+  var M = err.match(/^(\d+):(\d+)?:?/);
   var lineno;
   if (M && M.length > 0) {
 	 lineno = Number(M[1]);
@@ -60,9 +60,33 @@ function setup(remote) {
   session.setTabSize(2);
   editor.setSession(session);
 
-  $("#compile").click(function () {
+  $("#configDialog").dialog({
+	 autoOpen: false,
+	 width: 600,
+	 buttons: {
+		"D'acord": function() {
+		  $(this).dialog("close");
+		}
+	 },
+	 modal: true
+  });
+
+  $("#compileButton").button({
+	 icons: { primary: 'ui-icon-gear' }
+  });
+
+  $("#compileButton").click(function () {
     var code = session.getDocument().getValue();
     remote.compile(code, show_errors);
+  });
+
+  $("#settingsButton").button({
+	 icons: { primary: 'ui-icon-wrench' }
+  });
+
+  $("#settingsButton").button().click(function () {
+	 $("#configDialog").dialog('open');
+	 return false;
   });
 
   $("#errors").resize(function () {
