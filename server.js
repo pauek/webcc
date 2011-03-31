@@ -24,15 +24,17 @@ function split_lines(text) {
   return lines;
 }
 
+var compiler = "clang";
+
 var server = dnode({
   compile: function (text, _callback) {
-    var gcc = spawn('/bin/sh', ['-c', 'gcc -Wall -x c++ - -lstdc++']);
+    var cc = spawn('/bin/sh', ['-c', compiler + ' -Wall -x c++ - -lstdc++']);
     var stderr = '';
-    gcc.stdin.end(text);
-    gcc.stderr.addListener('data', function (chunk) {
+    cc.stdin.end(text);
+    cc.stderr.addListener('data', function (chunk) {
       stderr += chunk;
     });
-    gcc.addListener('exit', function (code, signal) {
+    cc.addListener('exit', function (code, signal) {
 		var lines = split_lines(stderr);
       _callback(lines);
     });
