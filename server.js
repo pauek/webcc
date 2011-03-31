@@ -34,7 +34,6 @@ var server = dnode({
     });
     gcc.addListener('exit', function (code, signal) {
 		var lines = split_lines(stderr);
-		console.log(lines.length);
       _callback(lines);
     });
   }
