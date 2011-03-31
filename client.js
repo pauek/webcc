@@ -77,6 +77,10 @@ function sessionStart(_session) {
   $("#compileButton").button("enable");
 }
 
+function sourceCodeChanged() {
+  $("#runButton").button("disable");
+}
+
 function setup(remote) {
   var EditSession = require("ace/edit_session").EditSession;
   var CppMode = require("ace/mode/c_cpp").Mode;
@@ -86,6 +90,7 @@ function setup(remote) {
   var session = new EditSession(program);
   session.setMode(new CppMode());
   session.setTabSize(2);
+  session.on('change', sourceCodeChanged);
   editor.setSession(session);
 
   $("#configDialog").dialog({
