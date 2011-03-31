@@ -40,6 +40,9 @@ function showErrors(errs) {
   if (errs.length == 0) {
 	 $("#errors").css({ height: 0 });
 	 $("#runButton").button("enable");
+	 $("#compileButton")
+		.button("disable")
+		.button({ icons: { primary: 'ui-icon-check' } });
   } else {
 	 $("#errors").css({ height: "30%" });
 	 $("#runButton").button("disable");
@@ -78,6 +81,9 @@ function sessionStart(_session) {
 }
 
 function sourceCodeChanged() {
+  $("#compileButton")
+	 .button("enable")
+	 .button({ icons: { primary: 'ui-icon-gear' } });
   $("#runButton").button("disable");
 }
 
