@@ -36,6 +36,7 @@ html, body {
   background: #fcc;
   height: 0px;
   font-size: 12px;
+  overflow: scroll;
 }
 
 #errors pre {
