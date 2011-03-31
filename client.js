@@ -1,5 +1,6 @@
 
 var editor;
+var remote;
 
 function clear_errors() {
   $("#errors").html('');
@@ -38,8 +39,10 @@ function showErrors(errs) {
   clear_errors();
   if (errs.length == 0) {
 	 $("#errors").css({ height: 0 });
+	 $("#runButton").button("enable");
   } else {
 	 $("#errors").css({ height: "30%" });
+	 $("#runButton").button("disable");
 	 for (var i = 0; i < errs.length; i++) {
 		addError(errs[i]);
 	 }
@@ -49,11 +52,24 @@ function showErrors(errs) {
   editor.resize();
 }
 
-function runProgram() {
-  alert("Now the program is run...");
+function compileProgram() {
+  var code = editor.getSession().getDocument().getValue();
+  remote.compile(code, showErrors);
 }
 
-function setup(remote) {
+function runProgram() {
+  if (!$(this).button("option", "disabled")) {
+	 alert("Now the program is run...");
+  }
+}
+
+function openSettings() {
+  $("#configDialog").dialog('open');
+  return false;
+}
+
+function setup(_remote) {
+  remote = _remote;
   var EditSession = require("ace/edit_session").EditSession;
   var CppMode = require("ace/mode/c_cpp").Mode;
 
@@ -66,40 +82,28 @@ function setup(remote) {
 
   $("#configDialog").dialog({
 	 autoOpen: false,
+	 modal: true,
 	 width: 600,
+	 height: 420,
 	 buttons: {
 		"D'acord": function() {
 		  $(this).dialog("close");
 		}
 	 },
-	 modal: true
   });
 
-  $("#compileButton").button({
-	 icons: { primary: 'ui-icon-gear' }
-  });
+  $("#compileButton")
+	 .button({ icons: { primary: 'ui-icon-gear' } })
+	 .click(compileProgram);
 
-  $("#compileButton").click(function () {
-    var code = session.getDocument().getValue();
-    remote.compile(code, showErrors);
-  });
-
-  $("#runButton").button({
-	 icons: { primary: 'ui-icon-play' }
-  });
-
-  $("#runButton").button().click(function () {
-	 runProgram();
-  });
-
-  $("#settingsButton").button({
-	 icons: { primary: 'ui-icon-wrench' }
-  });
-
-  $("#settingsButton").button().click(function () {
-	 $("#configDialog").dialog('open');
-	 return false;
-  });
+  $("#runButton")
+	 .button({ icons: { primary: 'ui-icon-play' } })
+	 .button("disable")
+	 .click(runProgram);
+  
+  $("#settingsButton")
+	 .button({ icons: { primary: 'ui-icon-wrench' } })
+    .click(openSettings);
 
   $("#errors").resize(function () {
 	 var y = $("body").height() - $("#errors").height();
