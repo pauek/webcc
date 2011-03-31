@@ -5,17 +5,17 @@ function clear_errors() {
   $("#errors").html('');
 }
 
-var highlighted_item = null;
+var prevItem = null;
 
-function highlight_item(item) {
-  if (highlighted_item) {
-	 $(highlighted_item).css({ background: "none" });
+function highlightItem(item) {
+  if (prevItem) {
+	 $(prevItem).css({ background: "none" });
   }
   $(item).css({ background: "red", });
-  highlighted_item = item;
+  prevItem = item;
 }
 
-function error_line(err) {
+function errorLine(err) {
   var M = err.match(/^(\d+):(\d+)?:?/);
   var lineno;
   if (M && M.length > 0) {
@@ -24,29 +24,33 @@ function error_line(err) {
   return lineno;
 }
 
-function add_error(err) {
+function addError(err) {
   $('<pre>' + err + '</pre>')
     .click(function () {
-		var ln = error_line(err);
+		var ln = errorLine(err);
 		if (ln) editor.gotoLine(ln, false);
-		highlight_item(this);
+		highlightItem(this);
 	 })
 	 .appendTo("#errors");
 }
 
-function show_errors(errs) {
+function showErrors(errs) {
   clear_errors();
   if (errs.length == 0) {
 	 $("#errors").css({ height: 0 });
   } else {
 	 $("#errors").css({ height: "30%" });
 	 for (var i = 0; i < errs.length; i++) {
-		add_error(errs[i]);
+		addError(errs[i]);
 	 }
   }
   var H = $("#errors").height();
   $("#editor").css({ bottom: H + 2 });
   editor.resize();
+}
+
+function runProgram() {
+  alert("Now the program is run...");
 }
 
 function setup(remote) {
@@ -77,7 +81,15 @@ function setup(remote) {
 
   $("#compileButton").click(function () {
     var code = session.getDocument().getValue();
-    remote.compile(code, show_errors);
+    remote.compile(code, showErrors);
+  });
+
+  $("#runButton").button({
+	 icons: { primary: 'ui-icon-play' }
+  });
+
+  $("#runButton").button().click(function () {
+	 runProgram();
   });
 
   $("#settingsButton").button({
