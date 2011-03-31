@@ -26,9 +26,32 @@ function split_lines(text) {
 
 var compiler = "gcc";
 
-var server = dnode({
-  compile: function (text, _callback) {
-	 var cmd = compiler + ' -Wall -x c++ - -lstdc++';
+var server = dnode(function (client, connection) {
+  this.startSession = function (_callback) {
+	 // Aquí se puede mirar un login+password
+	 _callback(new Session({
+		client: client,
+		connection: connection,
+	 }));
+  }
+});
+
+var global_id = 1;
+
+var Session = function (params) {
+  var conn = params.connection;
+  var client = params.client;
+  var id = global_id;
+  global_id += 1;
+
+  console.log("Session start: " + id + ' ' + client + ' ' + conn);
+  
+  conn.addListener('end', function() {
+	 console.log('Session end:' + id + ' ' + client + ' ' + conn);
+  });
+
+  this.compile = function (text, _callback) {
+	 var cmd = compiler + ' -o a.out.' + id + ' -Wall -x c++ - -lstdc++';
     var cc = spawn('/bin/sh', ['-c', cmd]);
     var stderr = '';
     cc.stdin.end(text);
@@ -40,5 +63,20 @@ var server = dnode({
       _callback(lines);
     });
   }
-});
+
+  this.run = function (text, _callback) {
+	 var cmd = './a.out.' + id;
+	 var exe = spawn('/bin/sh', ['-c', cmd]);
+	 var stdout = '';
+	 exe.stdin.end(text);
+	 exe.stdout.addListener('data', function (chunk) {
+		stdout += chunk;
+	 });
+	 exe.addListener('exit', function (code, signal) {
+		var outputLines = stdout.split('\n');
+		_callback(outputLines);
+	 });
+  }
+}
+
 server.listen(app);

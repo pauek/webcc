@@ -1,6 +1,6 @@
 
 var editor;
-var remote;
+var session;
 
 function clear_errors() {
   $("#errors").html('');
@@ -54,12 +54,16 @@ function showErrors(errs) {
 
 function compileProgram() {
   var code = editor.getSession().getDocument().getValue();
-  remote.compile(code, showErrors);
+  session.compile(code, showErrors);
+}
+
+function showOutput(linesOfOutput) {
+  alert(linesOfOutput);
 }
 
 function runProgram() {
   if (!$(this).button("option", "disabled")) {
-	 alert("Now the program is run...");
+	 session.run("", showOutput);
   }
 }
 
@@ -68,8 +72,12 @@ function openSettings() {
   return false;
 }
 
-function setup(_remote) {
-  remote = _remote;
+function sessionStart(_session) {
+  session = _session;
+  $("#compileButton").button("enable");
+}
+
+function setup(remote) {
   var EditSession = require("ace/edit_session").EditSession;
   var CppMode = require("ace/mode/c_cpp").Mode;
 
@@ -94,6 +102,7 @@ function setup(_remote) {
 
   $("#compileButton")
 	 .button({ icons: { primary: 'ui-icon-gear' } })
+	 .button("disable")
 	 .click(compileProgram);
 
   $("#runButton")
@@ -110,6 +119,8 @@ function setup(_remote) {
     alert(y);
 	 $("#editor").css({ bottom: y });
   });
+
+  remote.startSession(sessionStart);
 }
 
 $(document).ready(function () {
