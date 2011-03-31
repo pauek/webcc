@@ -48,7 +48,7 @@ function show_errors(errs) {
 	 }
   }
   var H = $("#errors").height();
-  $("#editor").css({ bottom: H });
+  $("#editor").css({ bottom: H + 2 });
   editor.resize();
 }
 
