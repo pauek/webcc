@@ -15,16 +15,23 @@ function highlight_item(item) {
   highlighted_item = item;
 }
 
-function add_error(err) {
+function error_line(err) {
   var patt = /^(\d+): ?error:/;
-  var result = err.match(patt);
+  var M = err.match(patt);
   var lineno;
-  if (result && result.length > 0) {
-	 lineno = Number(result[0]);
+  if (M && M.length > 0) {
+	 lineno = Number(M[0]);
   }
+  return lineno;
+}
+
+function add_error(err) {
   $('<pre>' + err + '</pre>')
     .click(function () {
-		editor.scrollToLine(lineno, false);
+		var ln = error_line(err);
+		if (ln) {
+		  editor.scrollToLine(ln, false);
+		}
 		highlight_item(this);
 	 })
 	 .appendTo("#errors");
@@ -33,7 +40,7 @@ function add_error(err) {
 function show_errors(errs) {
   clear_errors();
   if (errs.length == 0) {
-	 $("#errors").css({ height: 30 });
+	 $("#errors").css({ height: 0 });
   } else {
 	 $("#errors").css({ height: "30%" });
 	 for (var i = 0; i < errs.length; i++) {
@@ -42,6 +49,7 @@ function show_errors(errs) {
   }
   var H = $("#errors").height();
   $("#editor").css({ bottom: H });
+  editor.resize();
 }
 
 function setup(remote) {
