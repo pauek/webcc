@@ -1,0 +1,2 @@
+wget ftp://ftp.ruby-lang.org//pub/ruby/1.8/ruby-1.8.7-p302.tar.gz
+./configure --disable-largefile --disable-fastthread --disable-rpath --disable-shared --enable-frame-address

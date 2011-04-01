@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/163/trunk/uevalrun/precompiled
+END
+xcat
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/140/trunk/uevalrun/precompiled/xcat
+END
+uevalrun
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/163/trunk/uevalrun/precompiled/uevalrun
+END
+minihalt
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/140/trunk/uevalrun/precompiled/minihalt
+END
+uevalrun.guestinit
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/163/trunk/uevalrun/precompiled/uevalrun.guestinit
+END

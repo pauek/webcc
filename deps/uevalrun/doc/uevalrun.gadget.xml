@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="uevalrun doc gadget">
+    <Require feature="dynamic-height"/>
+  </ModulePrefs>
+  <Content type="html" href="http://pts-mini-gpl.googlecode.com/svn/trunk/uevalrun/doc/uevalrun.html" />
+</Module>

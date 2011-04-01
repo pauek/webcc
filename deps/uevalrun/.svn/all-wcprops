@@ -1,0 +1,137 @@
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/186/trunk/uevalrun
+END
+download.sh
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/177/trunk/uevalrun/download.sh
+END
+uevalrun.c
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/177/trunk/uevalrun/uevalrun.c
+END
+make_rootfs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/184/trunk/uevalrun/make_rootfs.sh
+END
+make_rootfs_gcx.sh
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/140/trunk/uevalrun/make_rootfs_gcx.sh
+END
+busybox-1.17.3-config
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/112/trunk/uevalrun/busybox-1.17.3-config
+END
+make_rootfs_mini_asroot.sh
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/140/trunk/uevalrun/make_rootfs_mini_asroot.sh
+END
+minihalt.c
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/140/trunk/uevalrun/minihalt.c
+END
+busybox.mini
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/134/trunk/uevalrun/busybox.mini
+END
+make_kernel.sh
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/140/trunk/uevalrun/make_kernel.sh
+END
+linux-2.6.36-uevalrun.patch
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/177/trunk/uevalrun/linux-2.6.36-uevalrun.patch
+END
+busybox
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/112/trunk/uevalrun/busybox
+END
+uevalrun.linux.uml
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/177/trunk/uevalrun/uevalrun.linux.uml
+END
+guestinit.c
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/184/trunk/uevalrun/guestinit.c
+END
+make_rootfs_mini.sh
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/140/trunk/uevalrun/make_rootfs_mini.sh
+END
+ruby-1.8-Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/122/trunk/uevalrun/ruby-1.8-Makefile
+END
+repeat.c
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/142/trunk/uevalrun/repeat.c
+END
+ruby-1.8-configure
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/122/trunk/uevalrun/ruby-1.8-configure
+END
+uevalrun.rootfs.mini.minix.img
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/163/trunk/uevalrun/uevalrun.rootfs.mini.minix.img
+END
+make
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/118/trunk/uevalrun/make
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/159/trunk/uevalrun/Makefile
+END
+ruby-1.8-dmyext.c
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/122/trunk/uevalrun/ruby-1.8-dmyext.c
+END
+busybox-1.17.3-config.mini
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/134/trunk/uevalrun/busybox-1.17.3-config.mini
+END

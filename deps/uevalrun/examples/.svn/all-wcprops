@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/177/trunk/uevalrun/examples
+END
+answer.bad.exp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/111/trunk/uevalrun/examples/answer.bad.exp
+END
+scat.php
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/123/trunk/uevalrun/examples/scat.php
+END
+xcat.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/111/trunk/uevalrun/examples/xcat.c
+END
+scat.py
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/122/trunk/uevalrun/examples/scat.py
+END
+answer.in
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/111/trunk/uevalrun/examples/answer.in
+END
+scat.pl
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/124/trunk/uevalrun/examples/scat.pl
+END
+scatlong.pl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/130/trunk/uevalrun/examples/scatlong.pl
+END
+scat.js
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/177/trunk/uevalrun/examples/scat.js
+END
+scat.lua
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/175/trunk/uevalrun/examples/scat.lua
+END
+answer.exp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/111/trunk/uevalrun/examples/answer.exp
+END
+scat.c
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/134/trunk/uevalrun/examples/scat.c
+END
+scat.rb
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/127/trunk/uevalrun/examples/scat.rb
+END
+run.sh
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/177/trunk/uevalrun/examples/run.sh
+END
+scat.cc
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/134/trunk/uevalrun/examples/scat.cc
+END

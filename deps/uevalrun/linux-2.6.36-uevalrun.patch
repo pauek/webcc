@@ -1,0 +1,1869 @@
+This is the patch against vanilla linux-2.6.36 so that the UML (User-mode Linux)
+kernel for uevalrun can be built. See make_kernel.sh for a complete script
+which builds the kernel (ELF 32-bit executable uevalrun.linux.uml).
+
+Here is how this patch file was generated.
+
+  for F in `cat linux-2.6.36/diff.list`; do
+    diff -Nu -U10 linux-2.6.36{.orig,}/"$F"; done >linux-2.6.36-uevalrun.patch
+
+This patch applies cleanly to the following kernels:
+
+* http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.36.tar.bz2
+* http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.36.1.tar.bz2
+
+--- linux-2.6.36.orig/.config	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.6.36/.config	2010-11-24 00:16:02.000000000 +0100
+@@ -0,0 +1,411 @@
++#
++# Automatically generated make config: don't edit
++# Linux kernel version: 2.6.36
++# Wed Nov 24 00:07:42 2010
++#
++CONFIG_DEFCONFIG_LIST="arch/$ARCH/defconfig"
++CONFIG_GENERIC_HARDIRQS=y
++CONFIG_UML=y
++CONFIG_MMU=y
++CONFIG_NO_IOMEM=y
++# CONFIG_TRACE_IRQFLAGS_SUPPORT is not set
++CONFIG_LOCKDEP_SUPPORT=y
++# CONFIG_STACKTRACE_SUPPORT is not set
++CONFIG_GENERIC_CALIBRATE_DELAY=y
++CONFIG_GENERIC_BUG=y
++CONFIG_GENERIC_CLOCKEVENTS=y
++CONFIG_IRQ_RELEASE_METHOD=y
++CONFIG_HZ=100
++
++#
++# UML-specific options
++#
++
++#
++# Host processor type and features
++#
++# CONFIG_M486 is not set
++# CONFIG_M586 is not set
++# CONFIG_M586TSC is not set
++# CONFIG_M586MMX is not set
++# CONFIG_M686 is not set
++# CONFIG_MPENTIUMII is not set
++CONFIG_MPENTIUMIII=y
++# CONFIG_MPENTIUMM is not set
++# CONFIG_MPENTIUM4 is not set
++# CONFIG_MK6 is not set
++# CONFIG_MK7 is not set
++# CONFIG_MK8 is not set
++# CONFIG_MCRUSOE is not set
++# CONFIG_MEFFICEON is not set
++# CONFIG_MWINCHIPC6 is not set
++# CONFIG_MWINCHIP3D is not set
++# CONFIG_MGEODEGX1 is not set
++# CONFIG_MGEODE_LX is not set
++# CONFIG_MCYRIXIII is not set
++# CONFIG_MVIAC3_2 is not set
++# CONFIG_MVIAC7 is not set
++# CONFIG_MCORE2 is not set
++# CONFIG_MATOM is not set
++CONFIG_X86_GENERIC=y
++CONFIG_X86_CPU=y
++CONFIG_X86_INTERNODE_CACHE_SHIFT=6
++CONFIG_X86_CMPXCHG=y
++CONFIG_X86_L1_CACHE_SHIFT=6
++CONFIG_X86_XADD=y
++CONFIG_X86_WP_WORKS_OK=y
++CONFIG_X86_INVLPG=y
++CONFIG_X86_BSWAP=y
++CONFIG_X86_POPAD_OK=y
++CONFIG_X86_INTEL_USERCOPY=y
++CONFIG_X86_USE_PPRO_CHECKSUM=y
++CONFIG_X86_TSC=y
++CONFIG_X86_CMPXCHG64=y
++CONFIG_X86_CMOV=y
++CONFIG_X86_MINIMUM_CPU_FAMILY=5
++CONFIG_CPU_SUP_INTEL=y
++CONFIG_CPU_SUP_CYRIX_32=y
++CONFIG_CPU_SUP_AMD=y
++CONFIG_CPU_SUP_CENTAUR=y
++CONFIG_CPU_SUP_TRANSMETA_32=y
++CONFIG_CPU_SUP_UMC_32=y
++CONFIG_UML_X86=y
++# CONFIG_64BIT is not set
++CONFIG_X86_32=y
++CONFIG_RWSEM_XCHGADD_ALGORITHM=y
++# CONFIG_RWSEM_GENERIC_SPINLOCK is not set
++# CONFIG_3_LEVEL_PGTABLES is not set
++CONFIG_ARCH_HAS_SC_SIGNALS=y
++CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA=y
++# CONFIG_SMP_BROKEN is not set
++CONFIG_GENERIC_HWEIGHT=y
++# CONFIG_STATIC_LINK is not set
++CONFIG_SELECT_MEMORY_MODEL=y
++CONFIG_FLATMEM_MANUAL=y
++CONFIG_FLATMEM=y
++CONFIG_FLAT_NODE_MEM_MAP=y
++CONFIG_PAGEFLAGS_EXTENDED=y
++CONFIG_SPLIT_PTLOCK_CPUS=4
++# CONFIG_PHYS_ADDR_T_64BIT is not set
++CONFIG_ZONE_DMA_FLAG=0
++CONFIG_VIRT_TO_BUS=y
++# CONFIG_KSM is not set
++CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
++CONFIG_TICK_ONESHOT=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_GENERIC_CLOCKEVENTS_BUILD=y
++CONFIG_LD_SCRIPT_DYN=y
++CONFIG_BINFMT_ELF=y
++# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
++CONFIG_HAVE_AOUT=y
++# CONFIG_BINFMT_AOUT is not set
++# CONFIG_BINFMT_MISC is not set
++# CONFIG_HOSTFS is not set
++# CONFIG_HPPFS is not set
++# CONFIG_MCONSOLE is not set
++# CONFIG_HIGHMEM is not set
++CONFIG_KERNEL_STACK_ORDER=0
++
++#
++# General setup
++#
++CONFIG_EXPERIMENTAL=y
++CONFIG_BROKEN_ON_SMP=y
++CONFIG_INIT_ENV_ARG_LIMIT=128
++CONFIG_CROSS_COMPILE=""
++CONFIG_LOCALVERSION=""
++CONFIG_LOCALVERSION_AUTO=y
++# CONFIG_SWAP is not set
++# CONFIG_SYSVIPC is not set
++# CONFIG_BSD_PROCESS_ACCT is not set
++
++#
++# RCU Subsystem
++#
++CONFIG_TREE_RCU=y
++# CONFIG_TINY_RCU is not set
++# CONFIG_RCU_TRACE is not set
++CONFIG_RCU_FANOUT=32
++# CONFIG_RCU_FANOUT_EXACT is not set
++# CONFIG_TREE_RCU_TRACE is not set
++# CONFIG_IKCONFIG is not set
++CONFIG_LOG_BUF_SHIFT=14
++# CONFIG_CGROUPS is not set
++# CONFIG_SYSFS_DEPRECATED_V2 is not set
++# CONFIG_RELAY is not set
++CONFIG_NAMESPACES=y
++# CONFIG_UTS_NS is not set
++# CONFIG_USER_NS is not set
++# CONFIG_PID_NS is not set
++# CONFIG_BLK_DEV_INITRD is not set
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++CONFIG_SYSCTL=y
++CONFIG_ANON_INODES=y
++# CONFIG_EMBEDDED is not set
++CONFIG_UID16=y
++CONFIG_SYSCTL_SYSCALL=y
++CONFIG_KALLSYMS=y
++CONFIG_KALLSYMS_EXTRA_PASS=y
++CONFIG_HOTPLUG=y
++CONFIG_PRINTK=y
++CONFIG_BUG=y
++CONFIG_ELF_CORE=y
++CONFIG_BASE_FULL=y
++CONFIG_FUTEX=y
++CONFIG_EPOLL=y
++CONFIG_SIGNALFD=y
++CONFIG_TIMERFD=y
++CONFIG_EVENTFD=y
++CONFIG_SHMEM=y
++CONFIG_AIO=y
++
++#
++# Kernel Performance Events And Counters
++#
++CONFIG_VM_EVENT_COUNTERS=y
++CONFIG_COMPAT_BRK=y
++CONFIG_SLAB=y
++# CONFIG_SLUB is not set
++# CONFIG_PROFILING is not set
++
++#
++# GCOV-based kernel profiling
++#
++# CONFIG_HAVE_GENERIC_DMA_COHERENT is not set
++CONFIG_SLABINFO=y
++CONFIG_RT_MUTEXES=y
++CONFIG_BASE_SMALL=0
++# CONFIG_MODULES is not set
++CONFIG_BLOCK=y
++# CONFIG_LBDAF is not set
++# CONFIG_BLK_DEV_BSG is not set
++# CONFIG_BLK_DEV_INTEGRITY is not set
++
++#
++# IO Schedulers
++#
++CONFIG_IOSCHED_NOOP=y
++# CONFIG_IOSCHED_DEADLINE is not set
++CONFIG_IOSCHED_CFQ=y
++CONFIG_DEFAULT_CFQ=y
++# CONFIG_DEFAULT_NOOP is not set
++CONFIG_DEFAULT_IOSCHED="cfq"
++# CONFIG_INLINE_SPIN_TRYLOCK is not set
++# CONFIG_INLINE_SPIN_TRYLOCK_BH is not set
++# CONFIG_INLINE_SPIN_LOCK is not set
++# CONFIG_INLINE_SPIN_LOCK_BH is not set
++# CONFIG_INLINE_SPIN_LOCK_IRQ is not set
++# CONFIG_INLINE_SPIN_LOCK_IRQSAVE is not set
++CONFIG_INLINE_SPIN_UNLOCK=y
++# CONFIG_INLINE_SPIN_UNLOCK_BH is not set
++CONFIG_INLINE_SPIN_UNLOCK_IRQ=y
++# CONFIG_INLINE_SPIN_UNLOCK_IRQRESTORE is not set
++# CONFIG_INLINE_READ_TRYLOCK is not set
++# CONFIG_INLINE_READ_LOCK is not set
++# CONFIG_INLINE_READ_LOCK_BH is not set
++# CONFIG_INLINE_READ_LOCK_IRQ is not set
++# CONFIG_INLINE_READ_LOCK_IRQSAVE is not set
++CONFIG_INLINE_READ_UNLOCK=y
++# CONFIG_INLINE_READ_UNLOCK_BH is not set
++CONFIG_INLINE_READ_UNLOCK_IRQ=y
++# CONFIG_INLINE_READ_UNLOCK_IRQRESTORE is not set
++# CONFIG_INLINE_WRITE_TRYLOCK is not set
++# CONFIG_INLINE_WRITE_LOCK is not set
++# CONFIG_INLINE_WRITE_LOCK_BH is not set
++# CONFIG_INLINE_WRITE_LOCK_IRQ is not set
++# CONFIG_INLINE_WRITE_LOCK_IRQSAVE is not set
++CONFIG_INLINE_WRITE_UNLOCK=y
++# CONFIG_INLINE_WRITE_UNLOCK_BH is not set
++CONFIG_INLINE_WRITE_UNLOCK_IRQ=y
++# CONFIG_INLINE_WRITE_UNLOCK_IRQRESTORE is not set
++# CONFIG_MUTEX_SPIN_ON_OWNER is not set
++# CONFIG_FREEZER is not set
++CONFIG_BLK_DEV=y
++CONFIG_BLK_DEV_UBD=y
++# CONFIG_BLK_DEV_UBD_SYNC is not set
++CONFIG_BLK_DEV_COW_COMMON=y
++# CONFIG_BLK_DEV_LOOP is not set
++
++#
++# DRBD disabled because PROC_FS, INET or CONNECTOR not selected
++#
++# CONFIG_BLK_DEV_RAM is not set
++
++#
++# Character Devices
++#
++CONFIG_STDERR_CONSOLE=y
++CONFIG_STDIO_CONSOLE=y
++CONFIG_SSL=y
++CONFIG_NULL_CHAN=y
++# CONFIG_PORT_CHAN is not set
++# CONFIG_PTY_CHAN is not set
++# CONFIG_TTY_CHAN is not set
++# CONFIG_XTERM_CHAN is not set
++CONFIG_NOCONFIG_CHAN=y
++CONFIG_CON_ZERO_CHAN="fd:0,fd:1"
++CONFIG_CON_CHAN="xterm"
++CONFIG_SSL_CHAN="pts"
++# CONFIG_UNIX98_PTYS is not set
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_RAW_DRIVER is not set
++# CONFIG_WATCHDOG is not set
++# CONFIG_UML_SOUND is not set
++# CONFIG_SOUND is not set
++# CONFIG_SOUND_OSS_CORE is not set
++# CONFIG_HOSTAUDIO is not set
++# CONFIG_HW_RANDOM is not set
++CONFIG_UML_RANDOM=y
++# CONFIG_MMAPPER is not set
++
++#
++# Generic Driver Options
++#
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++# CONFIG_DEVTMPFS is not set
++CONFIG_STANDALONE=y
++CONFIG_PREVENT_FIRMWARE_BUILD=y
++CONFIG_FW_LOADER=y
++# CONFIG_FIRMWARE_IN_KERNEL is not set
++CONFIG_EXTRA_FIRMWARE=""
++# CONFIG_SYS_HYPERVISOR is not set
++# CONFIG_NET is not set
++
++#
++# File systems
++#
++CONFIG_MINIX_FS=y
++# CONFIG_ADFS_FS is not set
++# CONFIG_AFFS_FS is not set
++# CONFIG_HFS_FS is not set
++# CONFIG_HFSPLUS_FS is not set
++# CONFIG_BEFS_FS is not set
++# CONFIG_BFS_FS is not set
++# CONFIG_EFS_FS is not set
++# CONFIG_LOGFS is not set
++# CONFIG_CRAMFS is not set
++# CONFIG_SQUASHFS is not set
++# CONFIG_VXFS_FS is not set
++# CONFIG_OMFS_FS is not set
++# CONFIG_HPFS_FS is not set
++# CONFIG_QNX4FS_FS is not set
++# CONFIG_ROMFS_FS is not set
++# CONFIG_SYSV_FS is not set
++# CONFIG_UFS_FS is not set
++# CONFIG_EXT2_FS is not set
++# CONFIG_EXT2_FS_XATTR is not set
++# CONFIG_EXT2_FS_XIP is not set
++# CONFIG_EXT3_FS is not set
++# CONFIG_EXT4_FS is not set
++# CONFIG_REISERFS_FS is not set
++# CONFIG_JFS_FS is not set
++# CONFIG_FS_POSIX_ACL is not set
++# CONFIG_XFS_FS is not set
++# CONFIG_BTRFS_FS is not set
++# CONFIG_NILFS2_FS is not set
++CONFIG_FILE_LOCKING=y
++# CONFIG_FSNOTIFY is not set
++# CONFIG_DNOTIFY is not set
++# CONFIG_INOTIFY_USER is not set
++# CONFIG_QUOTA is not set
++# CONFIG_AUTOFS_FS is not set
++# CONFIG_AUTOFS4_FS is not set
++# CONFIG_FUSE_FS is not set
++
++#
++# Caches
++#
++# CONFIG_FSCACHE is not set
++
++#
++# CD-ROM/DVD Filesystems
++#
++# CONFIG_ISO9660_FS is not set
++# CONFIG_UDF_FS is not set
++
++#
++# DOS/FAT/NT Filesystems
++#
++# CONFIG_MSDOS_FS is not set
++# CONFIG_VFAT_FS is not set
++# CONFIG_NTFS_FS is not set
++
++#
++# Pseudo filesystems
++#
++CONFIG_PROC_FS=y
++# CONFIG_PROC_KCORE is not set
++CONFIG_PROC_SYSCTL=y
++CONFIG_PROC_PAGE_MONITOR=y
++CONFIG_SYSFS=y
++CONFIG_TMPFS=y
++# CONFIG_TMPFS_POSIX_ACL is not set
++# CONFIG_HUGETLB_PAGE is not set
++# CONFIG_CONFIGFS_FS is not set
++CONFIG_MISC_FILESYSTEMS=y
++
++#
++# Partition Types
++#
++# CONFIG_PARTITION_ADVANCED is not set
++CONFIG_MSDOS_PARTITION=y
++# CONFIG_NLS is not set
++
++#
++# Security options
++#
++# CONFIG_KEYS is not set
++# CONFIG_SECURITY is not set
++# CONFIG_SECURITYFS is not set
++CONFIG_DEFAULT_SECURITY_DAC=y
++CONFIG_DEFAULT_SECURITY=""
++# CONFIG_CRYPTO is not set
++# CONFIG_BINARY_PRINTF is not set
++
++#
++# Library routines
++#
++CONFIG_GENERIC_FIND_FIRST_BIT=y
++CONFIG_GENERIC_FIND_NEXT_BIT=y
++CONFIG_GENERIC_FIND_LAST_BIT=y
++# CONFIG_CRC_CCITT is not set
++# CONFIG_CRC16 is not set
++# CONFIG_CRC_T10DIF is not set
++# CONFIG_CRC_ITU_T is not set
++# CONFIG_CRC32 is not set
++# CONFIG_CRC7 is not set
++# CONFIG_LIBCRC32C is not set
++CONFIG_HAS_DMA=y
++
++#
++# SCSI device support
++#
++CONFIG_SCSI_MOD=y
++# CONFIG_RAID_ATTRS is not set
++# CONFIG_SCSI is not set
++# CONFIG_SCSI_DMA is not set
++# CONFIG_SCSI_NETLINK is not set
++# CONFIG_MD is not set
++# CONFIG_NEW_LEDS is not set
++# CONFIG_INPUT is not set
++
++#
++# Kernel hacking
++#
++CONFIG_PRINTK_TIME=y
++CONFIG_ENABLE_WARN_DEPRECATED=y
++CONFIG_ENABLE_MUST_CHECK=y
++CONFIG_FRAME_WARN=1024
++# CONFIG_STRIP_ASM_SYMS is not set
++# CONFIG_UNUSED_SYMBOLS is not set
++# CONFIG_DEBUG_FS is not set
++# CONFIG_DEBUG_KERNEL is not set
++# CONFIG_HARDLOCKUP_DETECTOR is not set
++CONFIG_DEBUG_BUGVERBOSE=y
++CONFIG_DEBUG_MEMORY_INIT=y
++# CONFIG_RCU_CPU_STALL_DETECTOR is not set
++# CONFIG_SYSCTL_SYSCALL_CHECK is not set
++# CONFIG_ATOMIC64_SELFTEST is not set
++# CONFIG_SAMPLES is not set
++# CONFIG_DEBUG_STACK_USAGE is not set
+--- linux-2.6.36.orig/arch/um/Makefile	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/Makefile	2010-11-24 00:06:56.000000000 +0100
+@@ -99,21 +99,21 @@
+ # Options used by linker script
+ export LDS_START      := $(START)
+ export LDS_ELF_ARCH   := $(ELF_ARCH)
+ export LDS_ELF_FORMAT := $(ELF_FORMAT)
+ 
+ # The wrappers will select whether using "malloc" or the kernel allocator.
+ LINK_WRAPS = -Wl,--wrap,malloc -Wl,--wrap,free -Wl,--wrap,calloc
+ 
+ LD_FLAGS_CMDLINE = $(foreach opt,$(LDFLAGS),-Wl,$(opt))
+ 
+-CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE)
++CFLAGS_vmlinux := $(LINK-y) $(LINK_WRAPS) $(LD_FLAGS_CMDLINE) $(LD_XFLAGS)
+ define cmd_vmlinux__
+ 	$(CC) $(CFLAGS_vmlinux) -o $@ \
+ 	-Wl,-T,$(vmlinux-lds) $(vmlinux-init) \
+ 	-Wl,--start-group $(vmlinux-main) -Wl,--end-group \
+ 	-lutil \
+ 	$(filter-out $(vmlinux-lds) $(vmlinux-init) $(vmlinux-main) vmlinux.o \
+ 	FORCE ,$^) ; rm -f linux
+ endef
+ 
+ # When cleaning we don't include .config, so we don't include
+--- linux-2.6.36.orig/arch/um/os-Linux/util.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/os-Linux/util.c	2010-11-21 19:35:30.000000000 +0100
+@@ -68,24 +68,31 @@
+ 
+ void setup_hostinfo(char *buf, int len)
+ {
+ 	struct utsname host;
+ 
+ 	uname(&host);
+ 	snprintf(buf, len, "%s %s %s %s %s", host.sysname, host.nodename,
+ 		 host.release, host.version, host.machine);
+ }
+ 
++
+ void os_dump_core(void)
+ {
+ 	int pid;
+ 
++	/* Call tcsetattr to restore termios of con=fd:... devices */
++	/* TODO(pts): Also restore ssl= */
++	/* TODO(pts): Only restore fd: */
++        extern void console_exit(void);
++	console_exit();
++
+ 	signal(SIGSEGV, SIG_DFL);
+ 
+ 	/*
+ 	 * We are about to SIGTERM this entire process group to ensure that
+ 	 * nothing is around to run after the kernel exits.  The
+ 	 * kernel wants to abort, not die through SIGTERM, so we
+ 	 * ignore it here.
+ 	 */
+ 
+ 	signal(SIGTERM, SIG_IGN);
+
+--- linux-2.6.36.orig/arch/um/drivers/stdio_console.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/drivers/stdio_console.c	2010-11-21 19:35:30.000000000 +0100
+@@ -173,21 +173,21 @@
+ 		opts.xterm_title = new_title;
+ 
+ 	lines_init(vts, ARRAY_SIZE(vts), &opts);
+ 
+ 	con_init_done = 1;
+ 	register_console(&stdiocons);
+ 	return 0;
+ }
+ late_initcall(stdio_init);
+ 
+-static void console_exit(void)
++void console_exit(void)
+ {
+ 	if (!con_init_done)
+ 		return;
+ 	close_lines(vts, ARRAY_SIZE(vts));
+ }
+ __uml_exitcall(console_exit);
+ 
+ static int console_chan_setup(char *str)
+ {
+ 	char *error;
+--- linux-2.6.36.orig/arch/um/drivers/fd.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/drivers/fd.c	2010-11-21 19:35:30.000000000 +0100
+@@ -1,29 +1,31 @@
+ /*
+  * Copyright (C) 2001 - 2007 Jeff Dike (jdike@{linux.intel,addtoit}.com)
+  * Licensed under the GPL
+  */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <errno.h>
+ #include <termios.h>
++#include <fcntl.h>
++#include <linux/string.h>
+ #include "chan_user.h"
+ #include "kern_constants.h"
+ #include "os.h"
+ #include "um_malloc.h"
+ #include "user.h"
+ 
+ struct fd_chan {
+ 	int fd;
+-	int raw;
++	char raw, is_tty;
+ 	struct termios tt;
+ 	char str[sizeof("1234567890\0")];
+ };
+ 
+ static void *fd_init(char *str, int device, const struct chan_opts *opts)
+ {
+ 	struct fd_chan *data;
+ 	char *end;
+ 	int n;
+ 
+@@ -38,49 +40,99 @@
+ 		printk(UM_KERN_ERR "fd_init : couldn't parse file descriptor "
+ 		       "'%s'\n", str);
+ 		return NULL;
+ 	}
+ 
+ 	data = uml_kmalloc(sizeof(*data), UM_GFP_KERNEL);
+ 	if (data == NULL)
+ 		return NULL;
+ 
+ 	*data = ((struct fd_chan) { .fd  	= n,
+-				    .raw  	= opts->raw });
++				    .raw  	= opts->raw,
++				    .is_tty     = 0 });
+ 	return data;
+ }
+ 
++int create_pty_pair(int *master_fd, int *slave_fd) {
++	int retval;
++	char *p;
++
++	*master_fd = posix_openpt(O_RDWR | O_NOCTTY);
++	if (*master_fd == -1)
++		return -errno;
++
++	if (grantpt(*master_fd) == -1) {
++		retval = -errno;
++		close(*master_fd);						/* Might change 'errno' */
++		return retval;
++	}
++
++	if (unlockpt(*master_fd) == -1) {
++		retval = -errno;
++		close(*master_fd);						/* Might change 'errno' */
++		return retval;
++	}
++
++	p = ptsname(*master_fd);
++	if (p == NULL) {
++		retval = -errno;
++		close(*master_fd);						/* Might change 'errno' */
++		return retval;
++	}
++	*slave_fd = open64(p, O_RDWR | O_NOCTTY);
++	if (*slave_fd == -1) {
++		retval = -errno;
++		close(*master_fd);
++		return retval;
++	}
++	return 0;
++}
++
++
+ static int fd_open(int input, int output, int primary, void *d, char **dev_out)
+ {
+ 	struct fd_chan *data = d;
+ 	int err;
+ 
+-	if (data->raw && isatty(data->fd)) {
+-		CATCH_EINTR(err = tcgetattr(data->fd, &data->tt));
+-		if (err)
++	if (data->fd == -1) {
++		int master_fd, slave_fd;
++		err = create_pty_pair(&master_fd, &slave_fd);
++		if (err) {
++			printk(UM_KERN_ERR "Cannot crete PTY pair (%d)\n", err);
+ 			return err;
++		}
++		/* TODO(pts): Close the master eventually. */
++		data->fd = slave_fd;
++	}
+ 
+-		err = raw(data->fd);
+-		if (err)
+-			return err;
++	if (data->raw) {
++		CATCH_EINTR(err = tcgetattr(data->fd, &data->tt));
++		if (!err || (errno != ENOTTY && errno != EINVAL)) {
++			if (err)
++				return -errno;
++			data->is_tty = 1;
++			err = raw(data->fd);
++			if (err)
++				return err;
++		}
+ 	}
+ 	sprintf(data->str, "%d", data->fd);
+ 	*dev_out = data->str;
+ 	return data->fd;
+ }
+ 
+ static void fd_close(int fd, void *d)
+ {
+ 	struct fd_chan *data = d;
+ 	int err;
+ 
+-	if (!data->raw || !isatty(fd))
++	if (!data->is_tty)
+ 		return;
+ 
+ 	CATCH_EINTR(err = tcsetattr(fd, TCSAFLUSH, &data->tt));
+ 	if (err)
+ 		printk(UM_KERN_ERR "Failed to restore terminal state - "
+ 		       "errno = %d\n", -err);
+ 	data->raw = 0;
+ }
+ 
+ const struct chan_ops fd_ops = {
+--- linux-2.6.36.orig/arch/um/drivers/ubd_kern.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/drivers/ubd_kern.c	2010-11-21 17:45:19.000000000 +0100
+@@ -833,42 +833,40 @@
+ 
+ 	if(ubd_dev->file == NULL)
+ 		goto out;
+ 
+ 	err = ubd_file_size(ubd_dev, &ubd_dev->size);
+ 	if(err < 0){
+ 		*error_out = "Couldn't determine size of device's file";
+ 		goto out;
+ 	}
+ 
+-	ubd_dev->size = ROUND_BLOCK(ubd_dev->size);
+-
+ 	INIT_LIST_HEAD(&ubd_dev->restart);
+ 	sg_init_table(ubd_dev->sg, MAX_SG);
+ 
+ 	err = -ENOMEM;
+ 	ubd_dev->queue = blk_init_queue(do_ubd_request, &ubd_dev->lock);
+ 	if (ubd_dev->queue == NULL) {
+ 		*error_out = "Failed to initialize device queue";
+ 		goto out;
+ 	}
+ 	ubd_dev->queue->queuedata = ubd_dev;
+ 
+ 	blk_queue_max_segments(ubd_dev->queue, MAX_SG);
+-	err = ubd_disk_register(UBD_MAJOR, ubd_dev->size, n, &ubd_gendisk[n]);
++	err = ubd_disk_register(UBD_MAJOR, ROUND_BLOCK(ubd_dev->size), n, &ubd_gendisk[n]);
+ 	if(err){
+ 		*error_out = "Failed to register device";
+ 		goto out_cleanup;
+ 	}
+ 
+ 	if (fake_major != UBD_MAJOR)
+-		ubd_disk_register(fake_major, ubd_dev->size, n,
++		ubd_disk_register(fake_major, ROUND_BLOCK(ubd_dev->size), n,
+ 				  &fake_gendisk[n]);
+ 
+ 	/*
+ 	 * Perhaps this should also be under the "if (fake_major)" above
+ 	 * using the fake_disk->disk_name
+ 	 */
+ 	if (fake_ide)
+ 		make_ide_entries(ubd_gendisk[n]->disk_name);
+ 
+ 	err = 0;
+@@ -1279,35 +1277,37 @@
+ 		dev->request = NULL;
+ 	}
+ }
+ 
+ static int ubd_getgeo(struct block_device *bdev, struct hd_geometry *geo)
+ {
+ 	struct ubd *ubd_dev = bdev->bd_disk->private_data;
+ 
+ 	geo->heads = 128;
+ 	geo->sectors = 32;
+-	geo->cylinders = ubd_dev->size / (128 * 32 * 512);
++	geo->cylinders = ROUND_BLOCK(ubd_dev->size) / (128 * 32 * 512);
+ 	return 0;
+ }
+ 
+ static int ubd_ioctl(struct block_device *bdev, fmode_t mode,
+ 		     unsigned int cmd, unsigned long arg)
+ {
+ 	struct ubd *ubd_dev = bdev->bd_disk->private_data;
+ 	u16 ubd_id[ATA_ID_WORDS];
+ 
+ 	switch (cmd) {
+ 		struct cdrom_volctrl volume;
++	case 0x540F/*TIOCGPGRP*/:  /**** pts ****/
++		return put_user(ubd_dev->size, (u64 __user*)arg);
+ 	case HDIO_GET_IDENTITY:
+ 		memset(&ubd_id, 0, ATA_ID_WORDS * 2);
+-		ubd_id[ATA_ID_CYLS]	= ubd_dev->size / (128 * 32 * 512);
++		ubd_id[ATA_ID_CYLS]	= ROUND_BLOCK(ubd_dev->size) / (128 * 32 * 512);
+ 		ubd_id[ATA_ID_HEADS]	= 128;
+ 		ubd_id[ATA_ID_SECTORS]	= 32;
+ 		if(copy_to_user((char __user *) arg, (char *) &ubd_id,
+ 				 sizeof(ubd_id)))
+ 			return -EFAULT;
+ 		return 0;
+ 
+ 	case CDROMVOLREAD:
+ 		if(copy_from_user(&volume, (char __user *) arg, sizeof(volume)))
+ 			return -EFAULT;
+--- linux-2.6.36.orig/arch/um/include/asm/string.h	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.6.36/arch/um/include/asm/string.h	2010-11-20 22:21:04.000000000 +0100
+@@ -0,0 +1,56 @@
++/**** pts ****/
++#ifndef _ASM_X86_STRING_32_H
++#define _ASM_X86_STRING_32_H
++
++#ifdef __KERNEL__
++
++/* Let gcc decide whether to inline or use the out of line functions */
++
++#define __HAVE_ARCH_STRCPY
++extern char *strcpy(char *dest, const char *src);
++
++#define __HAVE_ARCH_STRNCPY
++extern char *strncpy(char *dest, const char *src, size_t count);
++
++#define __HAVE_ARCH_STRCAT
++extern char *strcat(char *dest, const char *src);
++
++#define __HAVE_ARCH_STRNCAT
++extern char *strncat(char *dest, const char *src, size_t count);
++
++#define __HAVE_ARCH_STRCMP
++extern int strcmp(const char *cs, const char *ct);
++
++#define __HAVE_ARCH_STRNCMP
++extern int strncmp(const char *cs, const char *ct, size_t count);
++
++#define __HAVE_ARCH_STRCHR
++extern char *strchr(const char *s, int c);
++
++#define __HAVE_ARCH_STRLEN
++extern size_t strlen(const char *s);
++
++#define __HAVE_ARCH_MEMCPY
++extern void *memcpy(void *dest, const void *src, size_t n);
++
++#define __HAVE_ARCH_MEMMOVE
++void *memmove(void *dest, const void *src, size_t n);
++
++#define __HAVE_ARCH_MEMCHR
++extern void *memchr(const void *cs, int c, size_t count);
++
++#define __HAVE_ARCH_STRNLEN
++extern size_t strnlen(const char *s, size_t count);
++
++#define __HAVE_ARCH_STRSTR
++extern char *strstr(const char *cs, const char *ct);
++
++#define __HAVE_ARCH_MEMSET
++extern void *memset(void *s, int c, size_t n);
++       
++#define __HAVE_ARCH_MEMSCAN
++extern void *memscan(void *addr, int c, size_t size);
++
++#endif /* __KERNEL__ */
++
++#endif /* _ASM_X86_STRING_32_H */
+--- linux-2.6.36.orig/arch/um/include/shared/kern_util.h	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/include/shared/kern_util.h	2010-11-22 01:00:53.000000000 +0100
+@@ -56,14 +56,14 @@
+ 
+ extern unsigned long to_irq_stack(unsigned long *mask_out);
+ extern unsigned long from_irq_stack(int nested);
+ 
+ extern void syscall_trace(struct uml_pt_regs *regs, int entryexit);
+ extern int singlestepping(void *t);
+ 
+ extern void segv_handler(int sig, struct uml_pt_regs *regs);
+ extern void bus_handler(int sig, struct uml_pt_regs *regs);
+ extern void winch(int sig, struct uml_pt_regs *regs);
+-extern void fatal_sigsegv(void) __attribute__ ((noreturn));
++extern void fatal_sigsegv(int sig) __attribute__ ((noreturn));
+ 
+ 
+ #endif
+--- linux-2.6.36.orig/arch/um/kernel/reboot.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/kernel/reboot.c	2010-11-21 22:22:38.000000000 +0100
+@@ -41,18 +41,19 @@
+ }
+ 
+ void machine_restart(char * __unused)
+ {
+ 	uml_cleanup();
+ 	reboot_skas();
+ }
+ 
+ void machine_power_off(void)
+ {
++	/* printk(KERN_ERR "machine_power_off\n"); */
+ 	uml_cleanup();
+ 	halt_skas();
+ }
+ 
+ void machine_halt(void)
+ {
+ 	machine_power_off();
+ }
+--- linux-2.6.36.orig/arch/um/kernel/trap.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/kernel/trap.c	2010-11-22 01:07:23.000000000 +0100
+@@ -117,23 +117,26 @@
+ {
+ 	struct siginfo si;
+ 
+ 	si.si_signo = SIGSEGV;
+ 	si.si_code = SEGV_ACCERR;
+ 	si.si_addr = (void __user *) FAULT_ADDRESS(fi);
+ 	current->thread.arch.faultinfo = fi;
+ 	force_sig_info(SIGSEGV, &si, current);
+ }
+ 
+-void fatal_sigsegv(void)
++void fatal_sigsegv(int sig)
+ {
+-	force_sigsegv(SIGSEGV, current);
++	if (sig == SIGSEGV)
++		force_sigsegv(sig, current);
++	else
++		force_sig(sig, current);
+ 	do_signal();
+ 	/*
+ 	 * This is to tell gcc that we're not returning - do_signal
+ 	 * can, in general, return, but in this case, it's not, since
+ 	 * we just got a fatal SIGSEGV queued.
+ 	 */
+ 	os_dump_core();
+ }
+ 
+ void segv_handler(int sig, struct uml_pt_regs *regs)
+--- linux-2.6.36.orig/arch/um/os-Linux/main.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/os-Linux/main.c	2010-11-21 23:44:02.000000000 +0100
+@@ -1,22 +1,25 @@
+ /*
+  * Copyright (C) 2000 - 2007 Jeff Dike (jdike@{addtoit,linux.intel}.com)
+  * Licensed under the GPL
+  */
+ 
++#include <fcntl.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <errno.h>
+ #include <signal.h>
+ #include <string.h>
+ #include <sys/resource.h>
++#include <sys/wait.h>
++#include "asm/param.h"  /* HZ */
+ #include "as-layout.h"
+ #include "init.h"
+ #include "kern_constants.h"
+ #include "kern_util.h"
+ #include "os.h"
+ #include "um_malloc.h"
+ 
+ #define PGD_BOUND (4 * 1024 * 1024)
+ #define STACKSIZE (8 * 1024 * 1024)
+ #define THREAD_NAME_LEN (256)
+@@ -44,22 +47,30 @@
+ 
+ 	call = &__uml_initcall_start;
+ 	while (call < &__uml_initcall_end) {
+ 		(*call)();
+ 		call++;
+ 	}
+ }
+ 
+ static void last_ditch_exit(int sig)
+ {
++	int pid;
+ 	uml_cleanup();
+-	exit(1);
++	signal(SIGTERM, SIG_IGN);
++	kill(0, SIGTERM);  /* Kill everybody else in the process group. */
++	kill(0, SIGCONT);  /* Let them see the signal. */
++	while ((pid = waitpid(-1, NULL, WNOHANG | __WALL)) > 0)
++	   os_kill_ptraced_process(pid, 0);
++	signal(sig, SIG_DFL);
++	kill(0, sig);
++	exit(1);  /* Not reached. */
+ }
+ 
+ static void install_fatal_handler(int sig)
+ {
+ 	struct sigaction action;
+ 
+ 	/* All signals are enabled in this handler ... */
+ 	sigemptyset(&action.sa_mask);
+ 
+ 	/*
+@@ -106,20 +117,73 @@
+ 	}
+ 	snprintf(new_path, path_len, "PATH=%s" UML_LIB_PATH, old_path);
+ 	if (putenv(new_path)) {
+ 		perror("couldn't putenv to set a new PATH");
+ 		free(new_path);
+ 	}
+ }
+ 
+ extern void scan_elf_aux( char **envp);
+ 
++#define PTS_ISDIGIT(c) ((c) - '0' + 0U <= 9)
++extern unsigned long preset_lpj;
++void delay_loop_speed(void) {  /**** pts ****/
++	int int_part, fraction_nom, fraction_den;
++	double bogomips;
++	char buf[1024], *p;
++	int got;
++	int fd = open64("/proc/cpuinfo", O_RDONLY);
++	if (fd < 0)
++		return;
++	got = read(fd, buf, sizeof buf - 1);
++	close(fd);
++	if (got < 0)
++		return;
++	buf[got] = '\0';
++	/* Find the bogomips of the first CPU. */
++	if (NULL == (p = strstr(buf, "\nbogomips")))
++		return;
++	p += 9;
++	while (*p == ' ' || *p == '\t')
++		++p;
++	if (*p++ != ':')
++		return;
++	/* sscanf(p, "%lf", &bogomips) doesn't seem to work (maybe no float
++	 * support?), so we're scanning the float manually.
++	 */
++	while (*p == ' ' || *p == '\t')
++		++p;
++	if (!PTS_ISDIGIT(*p))
++		return;
++	int_part = *p++ - '0';
++	fraction_nom = 0;
++	fraction_den = 1;
++	while (PTS_ISDIGIT(*p))
++		int_part = 10 * int_part + *p++ - '0';
++	if (*p == '.') {
++		++p;
++		if (!PTS_ISDIGIT(*p))
++			return;
++		while (PTS_ISDIGIT(*p)) {
++			fraction_nom = 10 * fraction_nom + *p++ - '0';
++			fraction_den *= 10;
++		}
++	}
++	if (*p != '\n' && *p != '\r' && *p != '\0' && *p != ' ' && *p != '\t')
++		return;
++	bogomips = int_part + (fraction_nom + 0.0) / fraction_den;
++	preset_lpj = bogomips * (500000 / HZ);
++	printf("Got from host /proc/cpuinfo: bogomips=%lu.%02lu lpj=%lu\n",
++	       (long)bogomips, (long)(bogomips * 100) % 100, preset_lpj);
++	return;
++}
++
+ int __init main(int argc, char **argv, char **envp)
+ {
+ 	char **new_argv;
+ 	int ret, i, err;
+ 
+ 	set_stklim();
+ 
+ 	setup_env_path();
+ 
+ 	new_argv = malloc((argc + 1) * sizeof(char *));
+@@ -136,23 +200,27 @@
+ 	}
+ 	new_argv[argc] = NULL;
+ 
+ 	/*
+ 	 * Allow these signals to bring down a UML if all other
+ 	 * methods of control fail.
+ 	 */
+ 	install_fatal_handler(SIGINT);
+ 	install_fatal_handler(SIGTERM);
+ 	install_fatal_handler(SIGHUP);
++	install_fatal_handler(SIGALRM);
++	install_fatal_handler(SIGPIPE);
++	install_fatal_handler(SIGXCPU);
+ 
+ 	scan_elf_aux(envp);
+ 
++        delay_loop_speed();
+ 	do_uml_initcalls();
+ 	ret = linux_main(argc, argv);
+ 
+ 	/*
+ 	 * Disable SIGPROF - I have no idea why libc doesn't do this or turn
+ 	 * off the profiling time, but UML dies with a SIGPROF just before
+ 	 * exiting when profiling is active.
+ 	 */
+ 	change_sig(SIGPROF, 0);
+ 
+@@ -178,21 +246,21 @@
+ 	 */
+ 	unblock_signals();
+ 
+ 	/* Reboot */
+ 	if (ret) {
+ 		printf("\n");
+ 		execvp(new_argv[0], new_argv);
+ 		perror("Failed to exec kernel");
+ 		ret = 1;
+ 	}
+-	printf("\n");
++	fflush(stdout);
+ 	return uml_exitcode;
+ }
+ 
+ extern void *__real_malloc(int);
+ 
+ void *__wrap_malloc(int size)
+ {
+ 	void *ret;
+ 
+ 	if (!kmalloc_ok)
+--- linux-2.6.36.orig/arch/um/os-Linux/skas/process.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/os-Linux/skas/process.c	2010-11-22 01:02:19.000000000 +0100
+@@ -69,139 +69,139 @@
+ 		if ((n < 0) || !WIFSTOPPED(status))
+ 			goto bad_wait;
+ 
+ 		if (((1 << WSTOPSIG(status)) & STUB_SIG_MASK) == 0)
+ 			break;
+ 
+ 		err = ptrace(PTRACE_CONT, pid, 0, 0);
+ 		if (err) {
+ 			printk(UM_KERN_ERR "wait_stub_done : continue failed, "
+ 			       "errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 	}
+ 
+ 	if (((1 << WSTOPSIG(status)) & STUB_DONE_MASK) != 0)
+ 		return;
+ 
+ bad_wait:
+ 	err = ptrace_dump_regs(pid);
+ 	if (err)
+ 		printk(UM_KERN_ERR "Failed to get registers from stub, "
+ 		       "errno = %d\n", -err);
+ 	printk(UM_KERN_ERR "wait_stub_done : failed to wait for SIGTRAP, "
+ 	       "pid = %d, n = %d, errno = %d, status = 0x%x\n", pid, n, errno,
+ 	       status);
+-	fatal_sigsegv();
++	fatal_sigsegv(SIGSEGV);
+ }
+ 
+ extern unsigned long current_stub_stack(void);
+ 
+ static void get_skas_faultinfo(int pid, struct faultinfo *fi)
+ {
+ 	int err;
+ 
+ 	if (ptrace_faultinfo) {
+ 		err = ptrace(PTRACE_FAULTINFO, pid, 0, fi);
+ 		if (err) {
+ 			printk(UM_KERN_ERR "get_skas_faultinfo - "
+ 			       "PTRACE_FAULTINFO failed, errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 
+ 		/* Special handling for i386, which has different structs */
+ 		if (sizeof(struct ptrace_faultinfo) < sizeof(struct faultinfo))
+ 			memset((char *)fi + sizeof(struct ptrace_faultinfo), 0,
+ 			       sizeof(struct faultinfo) -
+ 			       sizeof(struct ptrace_faultinfo));
+ 	}
+ 	else {
+ 		unsigned long fpregs[FP_SIZE];
+ 
+ 		err = get_fp_registers(pid, fpregs);
+ 		if (err < 0) {
+ 			printk(UM_KERN_ERR "save_fp_registers returned %d\n",
+ 			       err);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 		err = ptrace(PTRACE_CONT, pid, 0, SIGSEGV);
+ 		if (err) {
+ 			printk(UM_KERN_ERR "Failed to continue stub, pid = %d, "
+ 			       "errno = %d\n", pid, errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 		wait_stub_done(pid);
+ 
+ 		/*
+ 		 * faultinfo is prepared by the stub-segv-handler at start of
+ 		 * the stub stack page. We just have to copy it.
+ 		 */
+ 		memcpy(fi, (void *)current_stub_stack(), sizeof(*fi));
+ 
+ 		err = put_fp_registers(pid, fpregs);
+ 		if (err < 0) {
+ 			printk(UM_KERN_ERR "put_fp_registers returned %d\n",
+ 			       err);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 	}
+ }
+ 
+ static void handle_segv(int pid, struct uml_pt_regs * regs)
+ {
+ 	get_skas_faultinfo(pid, &regs->faultinfo);
+ 	segv(regs->faultinfo, 0, 1, NULL);
+ }
+ 
+ /*
+  * To use the same value of using_sysemu as the caller, ask it that value
+  * (in local_using_sysemu
+  */
+ static void handle_trap(int pid, struct uml_pt_regs *regs,
+ 			int local_using_sysemu)
+ {
+ 	int err, status;
+ 
+ 	if ((UPT_IP(regs) >= STUB_START) && (UPT_IP(regs) < STUB_END))
+-		fatal_sigsegv();
++		fatal_sigsegv(SIGSEGV);
+ 
+ 	/* Mark this as a syscall */
+ 	UPT_SYSCALL_NR(regs) = PT_SYSCALL_NR(regs->gp);
+ 
+ 	if (!local_using_sysemu)
+ 	{
+ 		err = ptrace(PTRACE_POKEUSR, pid, PT_SYSCALL_NR_OFFSET,
+ 			     __NR_getpid);
+ 		if (err < 0) {
+ 			printk(UM_KERN_ERR "handle_trap - nullifying syscall "
+ 			       "failed, errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 
+ 		err = ptrace(PTRACE_SYSCALL, pid, 0, 0);
+ 		if (err < 0) {
+ 			printk(UM_KERN_ERR "handle_trap - continuing to end of "
+ 			       "syscall failed, errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 
+ 		CATCH_EINTR(err = waitpid(pid, &status, WUNTRACED | __WALL));
+ 		if ((err < 0) || !WIFSTOPPED(status) ||
+ 		    (WSTOPSIG(status) != SIGTRAP + 0x80)) {
+ 			err = ptrace_dump_regs(pid);
+ 			if (err)
+ 				printk(UM_KERN_ERR "Failed to get registers "
+ 				       "from process, errno = %d\n", -err);
+ 			printk(UM_KERN_ERR "handle_trap - failed to wait at "
+ 			       "end of syscall, errno = %d, status = %d\n",
+ 			       errno, status);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 	}
+ 
+ 	handle_syscall(regs);
+ }
+ 
+ extern int __syscall_stub_start;
+ 
+ static int userspace_tramp(void *stack)
+ {
+@@ -364,46 +364,46 @@
+ 	while (1) {
+ 		/*
+ 		 * This can legitimately fail if the process loads a
+ 		 * bogus value into a segment register.  It will
+ 		 * segfault and PTRACE_GETREGS will read that value
+ 		 * out of the process.  However, PTRACE_SETREGS will
+ 		 * fail.  In this case, there is nothing to do but
+ 		 * just kill the process.
+ 		 */
+ 		if (ptrace(PTRACE_SETREGS, pid, 0, regs->gp))
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 
+ 		/* Now we set local_using_sysemu to be used for one loop */
+ 		local_using_sysemu = get_using_sysemu();
+ 
+ 		op = SELECT_PTRACE_OPERATION(local_using_sysemu,
+ 					     singlestepping(NULL));
+ 
+ 		if (ptrace(op, pid, 0, 0)) {
+ 			printk(UM_KERN_ERR "userspace - ptrace continue "
+ 			       "failed, op = %d, errno = %d\n", op, errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 
+ 		CATCH_EINTR(err = waitpid(pid, &status, WUNTRACED | __WALL));
+ 		if (err < 0) {
+ 			printk(UM_KERN_ERR "userspace - wait failed, "
+ 			       "errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 
+ 		regs->is_user = 1;
+ 		if (ptrace(PTRACE_GETREGS, pid, 0, regs->gp)) {
+ 			printk(UM_KERN_ERR "userspace - PTRACE_GETREGS failed, "
+ 			       "errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 
+ 		UPT_SYSCALL_NR(regs) = -1; /* Assume: It's not a syscall */
+ 
+ 		if (WIFSTOPPED(status)) {
+ 			int sig = WSTOPSIG(status);
+ 			switch (sig) {
+ 			case SIGSEGV:
+ 				if (PTRACE_FULL_FAULTINFO ||
+ 				    !ptrace_faultinfo) {
+@@ -434,24 +434,27 @@
+ 				break;
+ 			case SIGIO:
+ 			case SIGILL:
+ 			case SIGBUS:
+ 			case SIGFPE:
+ 			case SIGWINCH:
+ 				block_signals();
+ 				(*sig_info[sig])(sig, regs);
+ 				unblock_signals();
+ 				break;
++			case SIGXCPU:
++				fatal_sigsegv(SIGXCPU);
++				break;
+ 			default:
+ 				printk(UM_KERN_ERR "userspace - child stopped "
+ 				       "with signal %d\n", sig);
+-				fatal_sigsegv();
++				fatal_sigsegv(SIGSEGV);
+ 			}
+ 			pid = userspace_pid[0];
+ 			interrupt_end();
+ 
+ 			/* Avoid -ERESTARTSYS handling in host */
+ 			if (PT_SYSCALL_NR_OFFSET != PT_SYSCALL_RET_OFFSET)
+ 				PT_SYSCALL_NR(regs->gp) = -1;
+ 		}
+ 	}
+ }
+@@ -668,21 +671,21 @@
+ 		break;
+ 	case INIT_JMP_HALT:
+ 		kmalloc_ok = 0;
+ 		return 0;
+ 	case INIT_JMP_REBOOT:
+ 		kmalloc_ok = 0;
+ 		return 1;
+ 	default:
+ 		printk(UM_KERN_ERR "Bad sigsetjmp return in "
+ 		       "start_idle_thread - %d\n", n);
+-		fatal_sigsegv();
++		fatal_sigsegv(SIGSEGV);
+ 	}
+ 	longjmp(*switch_buf, 1);
+ }
+ 
+ void initial_thread_cb_skas(void (*proc)(void *), void *arg)
+ {
+ 	jmp_buf here;
+ 
+ 	cb_proc = proc;
+ 	cb_arg = arg;
+@@ -714,15 +717,15 @@
+ {
+ 	int err;
+ 
+ 	/* FIXME: need cpu pid in __switch_mm */
+ 	if (proc_mm) {
+ 		err = ptrace(PTRACE_SWITCH_MM, userspace_pid[0], 0,
+ 			     mm_idp->u.mm_fd);
+ 		if (err) {
+ 			printk(UM_KERN_ERR "__switch_mm - PTRACE_SWITCH_MM "
+ 			       "failed, errno = %d\n", errno);
+-			fatal_sigsegv();
++			fatal_sigsegv(SIGSEGV);
+ 		}
+ 	}
+ 	else userspace_pid[0] = mm_idp->u.pid;
+ }
+--- linux-2.6.36.orig/arch/um/os-Linux/start_up.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/os-Linux/start_up.c	2010-11-20 21:26:43.000000000 +0100
+@@ -80,21 +80,21 @@
+ 	va_end(list);
+ 
+ 	exit(1);
+ }
+ 
+ static void non_fatal(char *fmt, ...)
+ {
+ 	va_list list;
+ 
+ 	va_start(list, fmt);
+-	vfprintf(stderr, fmt, list);
++	vfprintf(stdout, fmt, list);
+ 	va_end(list);
+ }
+ 
+ static int start_ptraced_child(void)
+ {
+ 	int pid, n, status;
+ 
+ 	pid = fork();
+ 	if (pid == 0)
+ 		ptrace_child();
+@@ -463,21 +463,21 @@
+ 	}
+ 
+ 	stop_ptraced_child(pid, 1, 1);
+ #endif
+ }
+ 
+ static inline void check_skas3_proc_mm(void)
+ {
+ 	non_fatal("  - /proc/mm...");
+ 	if (access("/proc/mm", W_OK) < 0)
+-		perror("not found");
++		non_fatal("not found");
+ 	else if (disable_proc_mm)
+ 		non_fatal("found but disabled on command line\n");
+ 	else {
+ 		proc_mm = 1;
+ 		non_fatal("found\n");
+ 	}
+ }
+ 
+ void can_do_skas(void)
+ {
+--- linux-2.6.36.orig/arch/um/os-Linux/umid.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/um/os-Linux/umid.c	2010-11-21 23:06:02.000000000 +0100
+@@ -10,31 +10,32 @@
+ #include <fcntl.h>
+ #include <signal.h>
+ #include <string.h>
+ #include <unistd.h>
+ #include <sys/stat.h>
+ #include "init.h"
+ #include "kern_constants.h"
+ #include "os.h"
+ #include "user.h"
+ 
+-#define UML_DIR "~/.uml/"
++/* TODO(pts): why is make_uml_dir called with the defaults? -- disabled anyway because of strange effect on getenv("HOME") upon UML process exit */
++#define UML_DIR "-~/.uml/"
+ 
+ #define UMID_LEN 64
+ 
+ /* Changed by set_umid, which is run early in boot */
+ static char umid[UMID_LEN] = { 0 };
+ 
+ /* Changed by set_uml_dir and make_uml_dir, which are run early in boot */
+ static char *uml_dir = UML_DIR;
+ 
+-static int __init make_uml_dir(void)
++static int make_uml_dir(void)
+ {
+ 	char dir[512] = { '\0' };
+ 	int len, err;
+ 
+ 	if (*uml_dir == '~') {
+ 		char *home = getenv("HOME");
+ 
+ 		err = -ENOENT;
+ 		if (home == NULL) {
+ 			printk(UM_KERN_ERR "make_uml_dir : no value in "
+@@ -243,20 +244,22 @@
+ }
+ 
+ /* Changed in make_umid, which is called during early boot */
+ static int umid_setup = 0;
+ 
+ static int __init make_umid(void)
+ {
+ 	int fd, err;
+ 	char tmp[256];
+ 
++	if (uml_dir[0] == '-') return 0;
++
+ 	if (umid_setup)
+ 		return 0;
+ 
+ 	make_uml_dir();
+ 
+ 	if (*umid == '\0') {
+ 		strlcpy(tmp, uml_dir, sizeof(tmp));
+ 		strlcat(tmp, "XXXXXX", sizeof(tmp));
+ 		fd = mkstemp(tmp);
+ 		if (fd < 0) {
+@@ -379,18 +382,20 @@
+ 
+ __uml_setup("uml_dir=", set_uml_dir,
+ "uml_dir=<directory>\n"
+ "    The location to place the pid and umid files.\n\n"
+ );
+ 
+ static void remove_umid_dir(void)
+ {
+ 	char dir[strlen(uml_dir) + UMID_LEN + 1], err;
+ 
++	if (uml_dir[0] == '-') return;
++
+ 	sprintf(dir, "%s%s", uml_dir, umid);
+ 	err = remove_files_and_dir(dir);
+ 	if (err)
+ 		printf("remove_umid_dir - remove_files_and_dir failed with "
+ 		       "err = %d\n", err);
+ }
+ 
+ __uml_exitcall(remove_umid_dir);
+--- linux-2.6.36.orig/arch/x86/lib/string_32.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/arch/x86/lib/string_32.c	2010-11-20 22:27:19.000000000 +0100
+@@ -6,20 +6,21 @@
+  * used through-out, making for "slightly" unclear code :-)
+  *
+  * AK: On P4 and K7 using non string instruction implementations might be faster
+  * for large memory blocks. But most of them are unlikely to be used on large
+  * strings.
+  */
+ 
+ #include <linux/string.h>
+ #include <linux/module.h>
+ 
++#if 0  /**** pts ****/
+ #ifdef __HAVE_ARCH_STRCPY
+ char *strcpy(char *dest, const char *src)
+ {
+ 	int d0, d1, d2;
+ 	asm volatile("1:\tlodsb\n\t"
+ 		"stosb\n\t"
+ 		"testb %%al,%%al\n\t"
+ 		"jne 1b"
+ 		: "=&S" (d0), "=&D" (d1), "=&a" (d2)
+ 		: "0" (src), "1" (dest) : "memory");
+@@ -190,37 +191,20 @@
+ 		"movl $1,%0\n"
+ 		"1:\tdecl %0"
+ 		: "=D" (res), "=&c" (d0)
+ 		: "a" (c), "0" (cs), "1" (count)
+ 		: "memory");
+ 	return res;
+ }
+ EXPORT_SYMBOL(memchr);
+ #endif
+ 
+-#ifdef __HAVE_ARCH_MEMSCAN
+-void *memscan(void *addr, int c, size_t size)
+-{
+-	if (!size)
+-		return addr;
+-	asm volatile("repnz; scasb\n\t"
+-	    "jnz 1f\n\t"
+-	    "dec %%edi\n"
+-	    "1:"
+-	    : "=D" (addr), "=c" (size)
+-	    : "0" (addr), "1" (size), "a" (c)
+-	    : "memory");
+-	return addr;
+-}
+-EXPORT_SYMBOL(memscan);
+-#endif
+-
+ #ifdef __HAVE_ARCH_STRNLEN
+ size_t strnlen(const char *s, size_t count)
+ {
+ 	int d0;
+ 	int res;
+ 	asm volatile("movl %2,%0\n\t"
+ 		"jmp 2f\n"
+ 		"1:\tcmpb $0,(%0)\n\t"
+ 		"je 3f\n\t"
+ 		"incl %0\n"
+@@ -228,10 +212,29 @@
+ 		"cmpl $-1,%1\n\t"
+ 		"jne 1b\n"
+ 		"3:\tsubl %2,%0"
+ 		: "=a" (res), "=&d" (d0)
+ 		: "c" (s), "1" (count)
+ 		: "memory");
+ 	return res;
+ }
+ EXPORT_SYMBOL(strnlen);
+ #endif
++#endif
++
++#ifdef __HAVE_ARCH_MEMSCAN
++void *memscan(void *addr, int c, size_t size)
++{
++	if (!size)
++		return addr;
++	asm volatile("repnz; scasb\n\t"
++	    "jnz 1f\n\t"
++	    "dec %%edi\n"
++	    "1:"
++	    : "=D" (addr), "=c" (size)
++	    : "0" (addr), "1" (size), "a" (c)
++	    : "memory");
++	return addr;
++}
++EXPORT_SYMBOL(memscan);
++#endif
++
+--- linux-2.6.36.orig/fs/exec.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/fs/exec.c	2010-11-21 00:35:05.000000000 +0100
+@@ -685,25 +685,27 @@
+ 	struct file *file;
+ 	int err;
+ 
+ 	file = do_filp_open(AT_FDCWD, name,
+ 				O_LARGEFILE | O_RDONLY | FMODE_EXEC, 0,
+ 				MAY_EXEC | MAY_OPEN);
+ 	if (IS_ERR(file))
+ 		goto out;
+ 
+ 	err = -EACCES;
++	if (!S_ISBLK(file->f_path.dentry->d_inode->i_mode)) {
+ 	if (!S_ISREG(file->f_path.dentry->d_inode->i_mode))
+ 		goto exit;
+ 
+ 	if (file->f_path.mnt->mnt_flags & MNT_NOEXEC)
+ 		goto exit;
++	}
+ 
+ 	fsnotify_open(file);
+ 
+ 	err = deny_write_access(file);
+ 	if (err)
+ 		goto exit;
+ 
+ out:
+ 	return file;
+ 
+--- linux-2.6.36.orig/kernel/sys.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/kernel/sys.c	2010-11-21 02:24:06.000000000 +0100
+@@ -302,62 +302,62 @@
+  *	@cmd: pointer to buffer containing command to execute for restart
+  *		or %NULL
+  *
+  *	Shutdown everything and perform a clean reboot.
+  *	This is not safe to call in interrupt context.
+  */
+ void kernel_restart(char *cmd)
+ {
+ 	kernel_restart_prepare(cmd);
+ 	if (!cmd)
+-		printk(KERN_EMERG "Restarting system.\n");
++		printk(KERN_ALERT "Restarting system.\n");
+ 	else
+-		printk(KERN_EMERG "Restarting system with command '%s'.\n", cmd);
++		printk(KERN_ALERT "Restarting system with command '%s'.\n", cmd);
+ 	machine_restart(cmd);
+ }
+ EXPORT_SYMBOL_GPL(kernel_restart);
+ 
+ static void kernel_shutdown_prepare(enum system_states state)
+ {
+ 	blocking_notifier_call_chain(&reboot_notifier_list,
+ 		(state == SYSTEM_HALT)?SYS_HALT:SYS_POWER_OFF, NULL);
+ 	system_state = state;
+ 	device_shutdown();
+ }
+ /**
+  *	kernel_halt - halt the system
+  *
+  *	Shutdown everything and perform a clean system halt.
+  */
+ void kernel_halt(void)
+ {
+ 	kernel_shutdown_prepare(SYSTEM_HALT);
+ 	sysdev_shutdown();
+-	printk(KERN_EMERG "System halted.\n");
++	printk(KERN_ALERT "System halted.\n");
+ 	machine_halt();
+ }
+ 
+ EXPORT_SYMBOL_GPL(kernel_halt);
+ 
+ /**
+  *	kernel_power_off - power_off the system
+  *
+  *	Shutdown everything and perform a clean system power_off.
+  */
+ void kernel_power_off(void)
+ {
+ 	kernel_shutdown_prepare(SYSTEM_POWER_OFF);
+ 	if (pm_power_off_prepare)
+ 		pm_power_off_prepare();
+ 	disable_nonboot_cpus();
+ 	sysdev_shutdown();
+-	printk(KERN_EMERG "Power down.\n");
++	printk(KERN_ALERT "Power down.\n");
+ 	machine_power_off();
+ }
+ EXPORT_SYMBOL_GPL(kernel_power_off);
+ 
+ static DEFINE_MUTEX(reboot_mutex);
+ 
+ /*
+  * Reboot system call: for obvious reasons only root may call it,
+  * and even root needs to set up some magic numbers in the registers
+  * so that some mistake won't make this reboot the whole machine.
+--- linux-2.6.36.orig/lib/string.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/lib/string.c	2010-11-20 21:58:48.000000000 +0100
+@@ -77,21 +77,21 @@
+ 
+ 	do {
+ 		c1 = tolower(*s1++);
+ 		c2 = tolower(*s2++);
+ 	} while ((--n > 0) && c1 == c2 && c1 != 0);
+ 	return c1 - c2;
+ }
+ EXPORT_SYMBOL(strncasecmp);
+ #endif
+ 
+-#ifndef __HAVE_ARCH_STRCPY
++#if 0  /*#ifndef __HAVE_ARCH_STRCPY*/
+ /**
+  * strcpy - Copy a %NUL terminated string
+  * @dest: Where to copy the string to
+  * @src: Where to copy the string from
+  */
+ #undef strcpy
+ char *strcpy(char *dest, const char *src)
+ {
+ 	char *tmp = dest;
+ 
+@@ -698,21 +698,21 @@
+ 		len--;
+ 		if (!memcmp(s1, s2, l2))
+ 			return (char *)s1;
+ 		s1++;
+ 	}
+ 	return NULL;
+ }
+ EXPORT_SYMBOL(strnstr);
+ #endif
+ 
+-#ifndef __HAVE_ARCH_MEMCHR
++#if 0 /*#ifndef __HAVE_ARCH_MEMCHR*/
+ /**
+  * memchr - Find a character in an area of memory.
+  * @s: The memory area
+  * @c: The byte to search for
+  * @n: The size of the area.
+  *
+  * returns the address of the first occurrence of @c, or %NULL
+  * if @c is not found
+  */
+ void *memchr(const void *s, int c, size_t n)
+--- linux-2.6.36.orig/lib/vsprintf.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/lib/vsprintf.c	2010-11-20 22:30:17.000000000 +0100
+@@ -1231,20 +1231,21 @@
+ 	} else {
+ 		if (spec->flags & SIGN)
+ 			spec->type = FORMAT_TYPE_INT;
+ 		else
+ 			spec->type = FORMAT_TYPE_UINT;
+ 	}
+ 
+ 	return ++fmt - start;
+ }
+ 
++#if 0  /**** pts ****/
+ /**
+  * vsnprintf - Format a string and place it in a buffer
+  * @buf: The buffer to place the result into
+  * @size: The size of the buffer, including the trailing null space
+  * @fmt: The format string to use
+  * @args: Arguments for the format string
+  *
+  * This function follows C99 vsnprintf, but has some extensions:
+  * %pS output the name of a text symbol with offset
+  * %ps output the name of a text symbol without offset
+@@ -1428,20 +1429,21 @@
+ 			*str = '\0';
+ 		else
+ 			end[-1] = '\0';
+ 	}
+ 
+ 	/* the trailing null byte doesn't count towards the total */
+ 	return str-buf;
+ 
+ }
+ EXPORT_SYMBOL(vsnprintf);
++#endif
+ 
+ /**
+  * vscnprintf - Format a string and place it in a buffer
+  * @buf: The buffer to place the result into
+  * @size: The size of the buffer, including the trailing null space
+  * @fmt: The format string to use
+  * @args: Arguments for the format string
+  *
+  * The return value is the number of characters which have been written into
+  * the @buf not including the trailing '\0'. If @size is <= 0 the function
+@@ -1527,20 +1529,21 @@
+  * You probably want sprintf() instead.
+  *
+  * See the vsnprintf() documentation for format string extensions over C99.
+  */
+ int vsprintf(char *buf, const char *fmt, va_list args)
+ {
+ 	return vsnprintf(buf, INT_MAX, fmt, args);
+ }
+ EXPORT_SYMBOL(vsprintf);
+ 
++#if 0  /**** pts ****/
+ /**
+  * sprintf - Format a string and place it in a buffer
+  * @buf: The buffer to place the result into
+  * @fmt: The format string to use
+  * @...: Arguments for the format string
+  *
+  * The function returns the number of characters written
+  * into @buf. Use snprintf() or scnprintf() in order to avoid
+  * buffer overflows.
+  *
+@@ -1551,20 +1554,21 @@
+ 	va_list args;
+ 	int i;
+ 
+ 	va_start(args, fmt);
+ 	i = vsnprintf(buf, INT_MAX, fmt, args);
+ 	va_end(args);
+ 
+ 	return i;
+ }
+ EXPORT_SYMBOL(sprintf);
++#endif
+ 
+ #ifdef CONFIG_BINARY_PRINTF
+ /*
+  * bprintf service:
+  * vbin_printf() - VA arguments to binary data
+  * bstr_printf() - Binary data to text string
+  */
+ 
+ /**
+  * vbin_printf - Parse a format string and place args' binary value in a buffer
+--- linux-2.6.36.orig/scripts/mod/modpost.c	2010-10-20 22:30:22.000000000 +0200
++++ linux-2.6.36/scripts/mod/modpost.c	2010-11-20 21:38:08.000000000 +0100
+@@ -19,20 +19,22 @@
+ #include "../../include/generated/autoconf.h"
+ #include "../../include/linux/license.h"
+ 
+ /* Some toolchains use a `_' prefix for all user symbols. */
+ #ifdef CONFIG_SYMBOL_PREFIX
+ #define MODULE_SYMBOL_PREFIX CONFIG_SYMBOL_PREFIX
+ #else
+ #define MODULE_SYMBOL_PREFIX ""
+ #endif
+ 
++void __stack_chk_fail(void) {}
++
+ 
+ /* Are we using CONFIG_MODVERSIONS? */
+ int modversions = 0;
+ /* Warn about undefined symbols? (do so if we have vmlinux) */
+ int have_vmlinux = 0;
+ /* Is CONFIG_MODULE_SRCVERSION_ALL set? */
+ static int all_versions = 0;
+ /* If we are modposting external module set to 1 */
+ static int external_module = 0;
+ /* Warn about section mismatch in vmlinux if set to 1 */
+--- linux-2.6.36.orig/kernel/timeconst.h.fixed	1970-01-01 01:00:00.000000000 +0100
++++ linux-2.6.36/kernel/timeconst.h.fixed	2010-11-25 00:34:44.000000000 +0100
+@@ -0,0 +1,35 @@
++/* Automatically generated by kernel/timeconst.pl */
++/* Conversion constants for HZ == 100 */
++
++#ifndef KERNEL_TIMECONST_H
++#define KERNEL_TIMECONST_H
++
++#include <linux/param.h>
++#include <linux/types.h>
++
++#if HZ != 100
++#error "kernel/timeconst.h has the wrong HZ value!"
++#endif
++
++#define HZ_TO_MSEC_MUL32        U64_C(0xa0000000)
++#define HZ_TO_MSEC_ADJ32        U64_C(0x0)
++#define HZ_TO_MSEC_SHR32        28
++#define HZ_TO_MSEC_NUM          U64_C(10)
++#define HZ_TO_MSEC_DEN          U64_C(1)
++#define MSEC_TO_HZ_MUL32        U64_C(0xcccccccd)
++#define MSEC_TO_HZ_ADJ32        U64_C(0x733333333)
++#define MSEC_TO_HZ_SHR32        35
++#define MSEC_TO_HZ_NUM          U64_C(1)
++#define MSEC_TO_HZ_DEN          U64_C(10)
++#define HZ_TO_USEC_MUL32        U64_C(0x9c400000)
++#define HZ_TO_USEC_ADJ32        U64_C(0x0)
++#define HZ_TO_USEC_SHR32        18
++#define HZ_TO_USEC_NUM          U64_C(10000)
++#define HZ_TO_USEC_DEN          U64_C(1)
++#define USEC_TO_HZ_MUL32        U64_C(0xd1b71759)
++#define USEC_TO_HZ_ADJ32        U64_C(0x1fff2e48e8a7)
++#define USEC_TO_HZ_SHR32        45
++#define USEC_TO_HZ_NUM          U64_C(1)
++#define USEC_TO_HZ_DEN          U64_C(10000)
++
++#endif /* KERNEL_TIMECONST_H */
+--- linux-2.6.36.orig/kernel/Makefile.orig	2010-11-25 00:32:16.000000000 +0100
++++ linux-2.6.36/kernel/Makefile	2010-11-25 00:33:05.000000000 +0100
+@@ -124,14 +124,14 @@
+ 
+ quiet_cmd_ikconfiggz = IKCFG   $@
+       cmd_ikconfiggz = (echo "static const char kernel_config_data[] __used = MAGIC_START"; cat $< | scripts/bin2c; echo "MAGIC_END;") > $@
+ targets += config_data.h
+ $(obj)/config_data.h: $(obj)/config_data.gz FORCE
+ 	$(call if_changed,ikconfiggz)
+ 
+ $(obj)/time.o: $(obj)/timeconst.h
+ 
+ quiet_cmd_timeconst  = TIMEC   $@
+-      cmd_timeconst  = $(PERL) $< $(CONFIG_HZ) > $@
++      cmd_timeconst  = cp $(src)/timeconst.h.fixed $@
+ targets += timeconst.h
+ $(obj)/timeconst.h: $(src)/timeconst.pl FORCE
+ 	$(call if_changed,timeconst)
