@@ -32,7 +32,7 @@ ast.Node.prototype = {
       }
    },
    visit: function (visitor) {
-      self.__accept__('visit', visitor);
+      this.__accept__('visit', visitor);
    },
    walk: function (walker) {
       this.__accept__('enter', walker);
@@ -117,7 +117,7 @@ ast.nodeCount = function () {
 }
 
 ast.nodeCount.prototype = {
-   vNode: function(obj) {
+   visitNode: function(obj) {
       this.count++;
    }
 }
@@ -133,9 +133,9 @@ console.log(util.inspect(w, true, 4))
 
 w.walk(ast.wShowTree);
 
-// var nc = new ast.nodeCount();
-// i.visit(nc);
-// console.log(nc.count);
+var nc = new ast.nodeCount();
+i.visit(nc);
+console.log(nc.count);
 
 /* Export */
 
