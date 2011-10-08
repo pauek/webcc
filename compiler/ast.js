@@ -21,6 +21,37 @@ ast.Node = function () {};
 
 ast.Node.prototype = {
    typename: "Node",
+   forEachProperty: function (fn_node, fn_not_node) {
+      for (var prop in this) {
+         var own = this.hasOwnProperty(prop);
+         var is_node = this[prop] instanceof ast.Node;
+         var is_array_of_nodes = false;
+         if (this[prop] instanceof Array) {
+            is_array_of_nodes = true;
+            for (var i in this[prop]) {
+               if (!(this[prop][i] instanceof ast.Node)) {
+                  is_array_of_nodes = false;
+               }
+            }
+         }
+         if (own && (is_node || is_array_of_nodes)) {
+            if (fn_node !== null) fn_node(this[prop]);
+         } else {
+            if (fn_not_node !== null) fn_not_node(this[prop]);
+         }
+      }
+   }, 
+   forEachSubNode: function (fn) {
+      this.forEachProperty(fn, null);
+   },
+   forEachNonNode: function (fn) {
+      this.forEachProperty(null, fn);
+   },
+   isGroup: function () {
+      var c = 0;
+      this.forEachSubNode(function () { c++; });
+      return c > 0;
+   },
    __accept__: function (prefix, visitor) {
       var types = [this.typename, 'Node'];
       for (var i in types) {
@@ -36,12 +67,13 @@ ast.Node.prototype = {
    },
    walk: function (walker) {
       this.__accept__('enter', walker);
-      for (var prop in this) {
-         if (this.hasOwnProperty(prop) && 
-             this[prop] instanceof ast.Node) {
-            this[prop].walk(walker);
+      this.forEachSubNode(function (prop) {
+         if (prop instanceof Array) {
+            for (var i in prop) { prop[i].walk(walker); }
+         } else {
+            prop.walk(walker);
          }
-      }
+      });
       this.__accept__('depart', walker);
    }
 };
@@ -75,6 +107,11 @@ ast.makeNodeType = function (typename) {
 var nodeTypes = [
    "IncludeDirective", 
 	"UsingDirective", 
+   "Identifier",
+   "FunctionDef", 
+   "Program", 
+   "VariableDeclaration",
+   "VariableDeclarationStatement",
    "InputStatement",
    "OutputStatement",
 	"ForStmt", 
@@ -88,8 +125,10 @@ for (var i in nodeTypes) {
 
 /* Visitors */
 
-ast.wShowTree = {
+ast.showTree = {
    indent: 0,
+   group: false,
+
    log: function (msg) {
       var _indent = "";
       for (var i = 0; i < this.indent; i++) {
@@ -98,17 +137,11 @@ ast.wShowTree = {
       console.log(_indent + msg);
    },
    enterNode: function(obj) {
-      this.log("Node");
+      this.log(obj.typename);
+      if (obj.isGroup()) this.indent += 3;
    },
-   enterIncludeDirective: function (obj) {
-      this.log("Include");
-   },
-   enterWhileStmt: function (obj) {
-      this.log("WhileStmt:");
-      this.indent += 3;
-   },
-   departWhileStmt: function (obj) {
-      this.indent -= 3;
+   departNode: function (obj) {
+      if (obj.isGroup()) this.indent -= 3;
    }
 }
 
@@ -124,19 +157,23 @@ ast.nodeCount.prototype = {
 
 /* test... */
 
-var util = require('util');
-
-var i = new ast.IncludeDirective({ name: "iostream" });
-var n = new ast.Node();
-var w = new ast.WhileStmt({ cond: i, block: n });
-console.log(util.inspect(w, true, 4))
-
-w.walk(ast.wShowTree);
-
-var nc = new ast.nodeCount();
-i.visit(nc);
-console.log(nc.count);
+ast.test = function () {
+   var util = require('util');
+   
+   var i = new ast.IncludeDirective({ name: "iostream" });
+   var n = new ast.Node();
+   var w = new ast.WhileStmt({ cond: i, block: n });
+   console.log(util.inspect(w, true, 4))
+   
+   w.walk(ast.showTree);
+   
+   var nc = new ast.nodeCount();
+   i.visit(nc);
+   console.log(nc.count);
+}
 
 /* Export */
 
-module.exports.ast = ast;
+// ast.test();
+
+module.exports = ast;

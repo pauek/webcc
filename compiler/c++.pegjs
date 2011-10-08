@@ -30,7 +30,7 @@ Comment =
 
 Identifier = 
    name:([_A-Za-z] [_A-Za-z0-9]*) {
-      return new ast.Identifier(name);
+      return new ast.Identifier({ id: name });
    }
 
 Type =
@@ -55,16 +55,17 @@ FormalParameterList =
       return result;
    }
 
-VarDecl =
+VariableDeclaration =
    name:Identifier (__ "=" __ value:Literal)? {
-      return {
-         name: name,
-         value: value,
+      var result = { name: name };
+      if (typeof value != 'undefined') {
+         result.value = value;
       }
+      return new ast.VariableDeclaration(result);
    }
 
-VarDeclList =
-   head:VarDecl tail:(__ "," __ VarDecl) {
+VariableDeclarationList =
+   head:VariableDeclaration tail:(__ "," __ VariableDeclaration)* {
       var result = [head];
       for (var i = 0; i < tail.length; i++) {
          result.push(tail[i][3]);
@@ -72,16 +73,16 @@ VarDeclList =
       return result;
    }
 
-VarDeclStmt =
-   type:Type __ list:VarDeclList {
-      return new ast.VarDeclStmt(type, list);
+VariableDeclarationStatement =
+   t:Type __ v:VariableDeclarationList __ ";" {
+      return new ast.VariableDeclarationStatement({ type: t, list: v });
    }
 
-Stmt =
-   VarDeclStmt
+Statement =
+   VariableDeclarationStatement
 
-StmtList =
-   head:Stmt tail:(__ Stmt)* {
+StatementList =
+   head:Statement tail:(__ Statement)* {
       var result = [head];
       for (var i = 0; i < tail.length; i++) {
          result.push(tail[i][1]);
@@ -91,19 +92,18 @@ StmtList =
 
 
 FunctionBody =
-   StmtList
+   StatementList
 
 FunctionDef =
-   Type _ name:Identifier 
-   "(" __ params:FormalParameterList? __ ")" __
-   "{" __ elements:FunctionBody? __ "}" {
-      return new ast.Function(name, params, elements);
+   Type _ n:Identifier 
+   "(" __ p:FormalParameterList? __ ")" __
+   "{" __ e:FunctionBody? __ "}" {
+      return new ast.FunctionDef({ name: n, params: p, body: e });
    }
 
 IncludeDirective "include" =
   "#include" _ [<"] file:[a-z]* [>"] {
-     console.log("include!");
-     return new ast.Include(file)
+     return new ast.IncludeDirective({ file: file });
   }
 
 ProgramPart =
@@ -117,7 +117,7 @@ Program =
       for (var i = 0; i < tail.length; i++) {
          result.push(tail[i][1]);
       }  
-      return new ast.Program(result);
+      return new ast.Program({ parts: result });
    }
 
 
