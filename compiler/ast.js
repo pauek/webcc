@@ -88,7 +88,7 @@ for (var i in nodeTypes) {
 
 /* Visitors */
 
-ast.reportWalker = {
+ast.wShowTree = {
    indent: 0,
    log: function (msg) {
       var _indent = "";
@@ -131,7 +131,7 @@ var n = new ast.Node();
 var w = new ast.WhileStmt({ cond: i, block: n });
 console.log(util.inspect(w, true, 4))
 
-w.walk(ast.reportWalker);
+w.walk(ast.wShowTree);
 
 // var nc = new ast.nodeCount();
 // i.visit(nc);
