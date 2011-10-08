@@ -29,6 +29,15 @@ ast.Node.prototype = {
          visitor['vNode'].call(visitor, this);
       }
    },
+   walk: function (walker) {
+      this.accept(walker);
+      for (var prop in this) {
+         if (this.hasOwnProperty(prop) && 
+             this[prop] instanceof ast.Node) {
+            this[prop].walk(walker);
+         }
+      }
+   }
 };
 
 ast.NodeList = function() {
@@ -41,36 +50,34 @@ ast.NodeList.prototype.add = function (obj) {
    this.children.push(obj);
 }
 
-
 /* Construct node types */
 
-function nodeTypeMaker(Base) {
-   return function (typename) {
-      var NewType = function (obj) {
-         for (var prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-	            this[prop] = obj[prop];
-            }
+ast.makeNodeType = function (typename) {
+   var NewType = function (obj) {
+      for (var prop in obj) {
+         if (obj.hasOwnProperty(prop)) {
+	         this[prop] = obj[prop];
          }
       }
-      ast.__inherit__(typename, NewType, Base);
-      ast[typename] = NewType;
    }
+   ast.__inherit__(typename, NewType, ast.Node);
+   ast[typename] = NewType;
 }
 
-ast.makeNodeType = nodeTypeMaker(ast.Node);
+/* Create Types */
 
-/* Create Node Types */
-
-
-var types = [
+var nodeTypes = [
    "IncludeDirective", 
 	"UsingDirective", 
+   "InputStatement",
+   "OutputStatement",
 	"ForStmt", 
 	"WhileStmt",
+   "Block",
+   "BinaryExpression",
 ];
-for (var i in types) {
-   ast.makeNodeType(types[i]);
+for (var i in nodeTypes) { 
+   ast.makeNodeType(nodeTypes[i]); 
 }
 
 /* Visitors */
@@ -82,8 +89,8 @@ ast.reportVisitor = {
    vIncludeDirective: function (obj) {
       console.log("seen an Include!");
    },
-   vNodeList: function (obj) {
-      console.log("seen a NodeList!");
+   vWhileStmt: function (obj) {
+      console.log("seen a WhileStmt!");
       for (var i in obj.children) {
          obj.children[i].accept(this);
       }
@@ -106,13 +113,15 @@ var util = require('util');
 
 var i = new ast.IncludeDirective({ name: "iostream" });
 var n = new ast.Node();
-var L = new ast.NodeList();
-L.add(i);
-L.add(n);
+var L = new ast.WhileStmt({ cond: i, block: n });
 console.log(util.inspect(L, true, 4))
 
-L.accept(ast.reportVisitor);
+L.walk(ast.reportVisitor);
 
 var nc = new ast.nodeCount();
 i.accept(nc);
 console.log(nc.count);
+
+/* Export */
+
+module.exports.ast = ast;
