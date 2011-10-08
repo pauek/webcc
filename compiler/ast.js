@@ -21,22 +21,28 @@ ast.Node = function () {};
 
 ast.Node.prototype = {
    typename: "Node",
-   accept: function (visitor) {
-      var methodName = 'v' + this.typename;
-      if (methodName in visitor) {
-         visitor[methodName].call(visitor, this);
-      } else if ('vNode' in visitor) {
-         visitor['vNode'].call(visitor, this);
+   __accept__: function (prefix, visitor) {
+      var types = [this.typename, 'Node'];
+      for (var i in types) {
+         var method = prefix + types[i];
+         if (method in visitor) {
+            visitor[method].call(visitor, this);
+            return;
+         } 
       }
    },
+   visit: function (visitor) {
+      self.__accept__('visit', visitor);
+   },
    walk: function (walker) {
-      this.accept(walker);
+      this.__accept__('enter', walker);
       for (var prop in this) {
          if (this.hasOwnProperty(prop) && 
              this[prop] instanceof ast.Node) {
             this[prop].walk(walker);
          }
       }
+      this.__accept__('depart', walker);
    }
 };
 
@@ -82,18 +88,27 @@ for (var i in nodeTypes) {
 
 /* Visitors */
 
-ast.reportVisitor = {
-   vNode: function(obj) {
-      console.log("seen a Node!");
-   },
-   vIncludeDirective: function (obj) {
-      console.log("seen an Include!");
-   },
-   vWhileStmt: function (obj) {
-      console.log("seen a WhileStmt!");
-      for (var i in obj.children) {
-         obj.children[i].accept(this);
+ast.reportWalker = {
+   indent: 0,
+   log: function (msg) {
+      var _indent = "";
+      for (var i = 0; i < this.indent; i++) {
+         _indent += " ";
       }
+      console.log(_indent + msg);
+   },
+   enterNode: function(obj) {
+      this.log("Node");
+   },
+   enterIncludeDirective: function (obj) {
+      this.log("Include");
+   },
+   enterWhileStmt: function (obj) {
+      this.log("WhileStmt:");
+      this.indent += 3;
+   },
+   departWhileStmt: function (obj) {
+      this.indent -= 3;
    }
 }
 
@@ -113,14 +128,14 @@ var util = require('util');
 
 var i = new ast.IncludeDirective({ name: "iostream" });
 var n = new ast.Node();
-var L = new ast.WhileStmt({ cond: i, block: n });
-console.log(util.inspect(L, true, 4))
+var w = new ast.WhileStmt({ cond: i, block: n });
+console.log(util.inspect(w, true, 4))
 
-L.walk(ast.reportVisitor);
+w.walk(ast.reportWalker);
 
-var nc = new ast.nodeCount();
-i.accept(nc);
-console.log(nc.count);
+// var nc = new ast.nodeCount();
+// i.visit(nc);
+// console.log(nc.count);
 
 /* Export */
 
