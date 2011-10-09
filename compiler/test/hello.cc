@@ -1,7 +1,6 @@
 #include <iostream>
-
-// Hi there
+using namespace std;
 
 int main() {
-  int a = 1, b; 
+  cout << "Hello, world!" << endl;
 }
