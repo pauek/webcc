@@ -15,6 +15,9 @@ _ =
 
 Literal = [0-9]
 
+DecimalDigit
+  = [0-9]
+
 MultiLineComment =
    "/*" (!"*/" SourceCharacter)* "*/"
 
@@ -33,10 +36,65 @@ Identifier =
       return new ast.Identifier({ id: name });
    }
 
+Expression =
+   StringLiteral /
+   VariableReference
+
+StringLiteral "string" = 
+   '"' literal:StringCharacters? '"' {
+      return new ast.StringLiteral({ lit: literal });
+   }
+
+StringCharacters = 
+   chars:StringCharacter+ { 
+      return chars.join(""); 
+   }
+
+StringCharacter = 
+   !('"' / "\\" / LineTerminator) char_:SourceCharacter { return char_; } / 
+   "\\" sequence:EscapeSequence { return sequence; } / 
+   LineContinuation
+
+EscapeSequence = 
+   CharacterEscapeSequence / 
+   "0" !DecimalDigit { return "\0"; }
+
+CharacterEscapeSequence = 
+  SingleEscapeCharacter / 
+  NonEscapeCharacter
+
+SingleEscapeCharacter = 
+  char_:['"\\bfnrtv] {
+      return char_
+        .replace("b", "\b")
+        .replace("f", "\f")
+        .replace("n", "\n")
+        .replace("r", "\r")
+        .replace("t", "\t")
+        .replace("v", "\x0B") // IE does not recognize "\v".
+    }
+
+NonEscapeCharacter = 
+   (!EscapeCharacter / LineTerminator) char_:SourceCharacter { 
+      return char_; 
+   }
+
+EscapeCharacter = 
+   SingleEscapeCharacter / 
+   DecimalDigit
+
+LineContinuation
+  = "\\" sequence:LineTerminatorSequence { return sequence; }
+
+LineTerminatorSequence "end of line" = "\n" / "\r\n" / "\r"
+
 Type =
   "int" /
   "char" /
   "float"
+
+VariableReference =
+   id:Identifier { return new ast.VariableReference({ var: id }); }
 
 FormalParameter =
    type:Type _ name:Identifier {
@@ -74,12 +132,22 @@ VariableDeclarationList =
    }
 
 VariableDeclarationStatement =
-   t:Type __ v:VariableDeclarationList __ ";" {
-      return new ast.VariableDeclarationStatement({ type: t, list: v });
+   t:Type __ lst:VariableDeclarationList __ ";" {
+      return new ast.VariableDeclarationStatement({ type: t }, lst);
+   }
+
+OutputStatement =
+   "cout" elems:(__ "<<" __ Expression)* ";" {
+      var elements = [];
+      for (var i in elems) {
+         elements.push(elems[i][3]);
+      }
+      return new ast.OutputStatement({ head: "cout" }, elements);
    }
 
 Statement =
-   VariableDeclarationStatement
+   VariableDeclarationStatement /
+   OutputStatement
 
 StatementList =
    head:Statement tail:(__ Statement)* {
@@ -97,8 +165,8 @@ FunctionBody =
 FunctionDef =
    Type _ n:Identifier 
    "(" __ p:FormalParameterList? __ ")" __
-   "{" __ e:FunctionBody? __ "}" {
-      return new ast.FunctionDef({ name: n, params: p, body: e });
+   "{" __ body:FunctionBody? __ "}" {
+      return new ast.FunctionDef({ name: n, params: p }, body);
    }
 
 IncludeDirective "include" =
@@ -106,18 +174,22 @@ IncludeDirective "include" =
      return new ast.IncludeDirective({ file: file });
   }
 
+UsingDirective "using" =
+  "using" __ "namespace" __ ns:Identifier __ ";" {
+    return new ast.UsingDirective({ namespace: ns });
+  }
+
 ProgramPart =
   IncludeDirective /
+  UsingDirective /
   FunctionDef /
   Comment
 
 Program = 
    head:ProgramPart tail:(__ ProgramPart)* {
-      var result = [head];
+      var parts = [head];
       for (var i = 0; i < tail.length; i++) {
-         result.push(tail[i][1]);
+         parts.push(tail[i][1]);
       }  
-      return new ast.Program({ parts: result });
+      return new ast.Program({}, parts);
    }
-
-
