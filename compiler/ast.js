@@ -21,36 +21,13 @@ ast.Node = function () {};
 
 ast.Node.prototype = {
    typename: "Node",
-   forEachProperty: function (fn_node, fn_not_node) {
-      for (var prop in this) {
-         var own = this.hasOwnProperty(prop);
-         var is_node = this[prop] instanceof ast.Node;
-         var is_array_of_nodes = false;
-         if (this[prop] instanceof Array) {
-            is_array_of_nodes = true;
-            for (var i in this[prop]) {
-               if (!(this[prop][i] instanceof ast.Node)) {
-                  is_array_of_nodes = false;
-               }
-            }
-         }
-         if (own && (is_node || is_array_of_nodes)) {
-            if (fn_node !== null) fn_node(this[prop]);
-         } else {
-            if (fn_not_node !== null) fn_not_node(this[prop]);
-         }
-      }
-   }, 
-   forEachSubNode: function (fn) {
-      this.forEachProperty(fn, null);
-   },
-   forEachNonNode: function (fn) {
-      this.forEachProperty(null, fn);
-   },
    isGroup: function () {
-      var c = 0;
-      this.forEachSubNode(function () { c++; });
-      return c > 0;
+      return this.hasOwnProperty('__children__');
+   },
+   forEachChild: function (fn) {
+      for (var i in this.__children__) {
+         fn(this.__children__[i]);
+      }
    },
    __accept__: function (prefix, visitor) {
       var types = [this.typename, 'Node'];
@@ -67,35 +44,24 @@ ast.Node.prototype = {
    },
    walk: function (walker) {
       this.__accept__('enter', walker);
-      this.forEachSubNode(function (prop) {
-         if (prop instanceof Array) {
-            for (var i in prop) { prop[i].walk(walker); }
-         } else {
-            prop.walk(walker);
-         }
+      this.forEachChild(function (obj) {
+         obj.walk(walker);
       });
       this.__accept__('depart', walker);
    }
 };
 
-ast.NodeList = function() {
-   this.children = [];
-}
-
-ast.__inherit__("NodeList", ast.NodeList, ast.Node);
-
-ast.NodeList.prototype.add = function (obj) {
-   this.children.push(obj);
-}
-
 /* Construct node types */
 
 ast.makeNodeType = function (typename) {
-   var NewType = function (obj) {
+   var NewType = function (obj, children) {
       for (var prop in obj) {
          if (obj.hasOwnProperty(prop)) {
 	         this[prop] = obj[prop];
          }
+      }
+      if (children) {
+         this.__children__ = children;
       }
    }
    ast.__inherit__(typename, NewType, ast.Node);
@@ -110,6 +76,7 @@ var nodeTypes = [
    "Identifier",
    "FunctionDef", 
    "Program", 
+   "VariableReference",
    "VariableDeclaration",
    "VariableDeclarationStatement",
    "InputStatement",
@@ -118,12 +85,15 @@ var nodeTypes = [
 	"WhileStmt",
    "Block",
    "BinaryExpression",
+   "StringLiteral",
 ];
 for (var i in nodeTypes) { 
    ast.makeNodeType(nodeTypes[i]); 
 }
 
 /* Visitors */
+
+// showTree
 
 ast.showTree = {
    indent: 0,
@@ -145,6 +115,8 @@ ast.showTree = {
    }
 }
 
+// nodeCount
+
 ast.nodeCount = function () {
    this.count = 0;
 }
@@ -153,6 +125,25 @@ ast.nodeCount.prototype = {
    visitNode: function(obj) {
       this.count++;
    }
+}
+
+// rewriter
+
+ast.rewriter = function () {
+   this.indent = 0;
+   this.output = "";
+}
+
+ast.rewriter.prototype = {
+   emit: function (str) {
+      this.output += str;
+   },
+   visitIncludeDirective: function (obj) {
+      this.emit("#include <" + obj.file + ">\n");
+   },
+   visitUsingDirective: function (obj) {
+      this.emit("using namespace " + obj.namespace + ";\n");
+   },
 }
 
 /* test... */
